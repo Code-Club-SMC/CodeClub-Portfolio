@@ -1,0 +1,282 @@
+[
+  {
+    "id": "lavita",
+    "order": 1,
+    "title": "Lavita",
+    "category": "Web",
+    "description": "A luxury mountain club platform nestled at 9,200 ft in Malam Jabba, Swat Valley. Highlights exclusive membership experiences — from world-class skiing and vertical gardens to stargazing observatories — through a refined, dark-themed interface exuding elegance and exclusivity.",
+    "image": "lavita-web.jpeg",
+    "url": "https://lavita-luxury-4qel.vercel.app/",
+    "tags": ["Web Development", "Luxury", "Hospitality"]
+  },
+  {
+    "id": "pyramids",
+    "order": 2,
+    "title": "Pyramids",
+    "category": "Web",
+    "description": "Corporate digital presence for a leading architectural and engineering firm renowned for designing landmark skyscrapers and iconic commercial malls across Pakistan. Showcases expertise, project portfolios, and development milestones through a cinematic, scroll-driven experience.",
+    "image": "Pyramids-web.jpeg",
+    "url": "https://pyramids-website.vercel.app/",
+    "tags": ["Web Development", "Corporate", "Architecture"]
+  },
+  {
+    "id": "damosa",
+    "order": 3,
+    "title": "Damosa",
+    "category": "Web",
+    "description": "A premium food & frozen desserts brand platform showcasing authentic samosa flavors and artisan ice creams. Features an elegant menu explorer, online ordering system, and immersive hero visuals that blend tradition with modern indulgence.",
+    "image": "Damosa.jpeg",
+    "url": "https://damosa-premium.vercel.app/",
+    "tags": ["Web Development", "UI/UX", "E-Commerce"]
+  },
+  {
+    "id": "federal-youth-parliament",
+    "order": 4,
+    "title": "Federal Youth Parliament",
+    "category": "Web",
+    "description": "A digital platform empowering youth parliamentary engagement with event coordination, member registration, and resource management for Pakistan's federal youth initiative.",
+    "image": "federalyouthpar.png",
+    "url": null,
+    "tags": ["Web Development", "Civic Tech", "Full-Stack"]
+  },
+  {
+    "id": "zmong-khyber",
+    "order": 5,
+    "title": "Zmong Khyber Game Show",
+    "category": "Web",
+    "description": "A dynamic game show platform built for the Zmong Khyber entertainment brand, featuring real-time audience interaction, live scoring, and engaging visual experiences.",
+    "image": "web-project7.png",
+    "url": null,
+    "tags": ["Web Development", "Entertainment", "UI/UX"]
+  },
+  {
+    "id": "vibehive",
+    "order": 6,
+    "title": "VibeHive — Real-time Chat & Collaboration App",
+    "category": "Web",
+    "description": "Group chat, media sharing, presence indicators, and a clean UI. Built for seamless team and community communication.",
+    "image": "web_project6.png",
+    "url": null,
+    "tags": ["Full-Stack", "Real-Time", "Chat"]
+  },
+  {
+    "id": "peshawar-services-club",
+    "order": 7,
+    "title": "Peshawar Services Club",
+    "category": "Enterprise",
+    "description": "A full-stack digital ecosystem comprising a mobile app for members and a web-based CMS for administrators — enabling seamless management of facility bookings, room reservations, complaint tracking, and daily operations in real time across multiple departments.",
+    "image": "psc-web.png",
+    "url": null,
+    "tags": ["Full-Stack", "Mobile App", "CMS"]
+  },
+  {
+    "id": "Muftah Chemical PVT LTD",
+    "order": 8,
+    "title": "Muftah Chemical PVT LTD — ERP System",
+    "category": "Enterprise",
+    "description": "A role-based ERP system engineered for a detergent manufacturing factory, automating end-to-end production workflows, real-time inventory tracking, financial reporting, HR & payroll management, and a live command center dashboard with actionable business intelligence.",
+    "image": "muftah.jpeg",
+    "url": null,
+    "tags": ["Full-Stack", "ERP", "Manufacturing"]
+  },
+  {
+    "id": "concordia-peshawar-cms",
+    "order": 9,
+    "title": "Concordia Peshawar CMS",
+    "category": "Enterprise",
+    "description": "A comprehensive college management system empowering administrators with real-time control over academics, student records, fee collection, attendance, examination workflows, hostel operations, and financial reporting — all unified in a single, intuitive dashboard.",
+    "image": "concordia-web.png",
+    "url": null,
+    "tags": ["Full-Stack", "Education", "CMS"]
+  },
+  {
+    "id": "custom-lms",
+    "order": 10,
+    "title": "Custom LMS for an Education Platform",
+    "category": "Enterprise",
+    "description": "Supports live classes, quizzes, certification, and user dashboards for students, instructors, and admins. Built for scale.",
+    "image": "web_project3.png",
+    "url": null,
+    "tags": ["Full-Stack", "Education", "LMS"]
+  },
+  {
+    "id": "inventory-management",
+    "order": 11,
+    "title": "Inventory Management System",
+    "category": "Enterprise",
+    "description": "Tracks real-time stock, reduces overstocking, and streamlines supply operations for a multi-location retail chain. Includes barcode integration, role-based access, and reporting.",
+    "image": "web_project2.png",
+    "url": null,
+    "tags": ["Full-Stack", "Retail", "ERP"]
+  },
+  {
+    "id": "psc-app",
+    "order": 12,
+    "title": "Peshawar Services Club — App",
+    "category": "Mobile",
+    "description": "A feature-rich mobile application for Peshawar Services Club members, enabling seamless facility bookings, room reservations, event management, complaint tracking, and real-time operational updates — all from the palm of your hand.",
+    "image": "psc-app.jpeg",
+    "url": null,
+    "tags": ["Mobile App", "Full-Stack", "CMS"]
+  },
+  {
+    "id": "savsplit",
+    "order": 13,
+    "title": "SavSplit",
+    "category": "Mobile",
+    "description": "Dual-mode app for personal and business use. Personal: split bills, track expenses. Business: manage inventory, record sales—like QuickBooks & Splitwise in one.",
+    "image": "app_project.png",
+    "url": null,
+    "tags": ["Mobile App", "Finance", "Full-Stack"]
+  },
+  {
+    "id": "kp-tourism",
+    "order": 14,
+    "title": "Khyber Pakhtunkhwa — Tourism Discovery App",
+    "category": "Mobile",
+    "description": "Guides, maps, offline support, and trip planning to explore KP's historical, cultural, and natural treasures.",
+    "image": "app_project3.png",
+    "url": null,
+    "tags": ["Mobile App", "Tourism", "UI/UX"]
+  },
+  {
+    "id": "halaltick",
+    "order": 15,
+    "title": "Halaltick — Restaurant Ordering & Management App",
+    "category": "Mobile",
+    "description": "Order dine-in, takeaway, or delivery. Includes digital menus, live order tracking, and table reservations.",
+    "image": "app_project2.png",
+    "url": null,
+    "tags": ["Mobile App", "Food & Beverage", "Full-Stack"]
+  },
+  {
+    "id": "the-educators-app",
+    "order": 16,
+    "title": "The Educators App",
+    "category": "Mobile",
+    "description": "The Educators App is a comprehensive mobile application designed to streamline school operations, enhance parent-teacher communication, and provide students with easy access to educational resources. It serves as a centralized platform for managing admissions, fees, attendance, assignments, and school events, ensuring seamless coordination between parents, teachers, and school administration.",
+    "image": "educators.png",
+    "url": null,
+    "tags": ["Full-Stack", "Education", "Mobile App"]
+  },
+  {
+    "id": "gods-eye",
+    "order": 17,
+    "title": "God's Eye — AI Trading Platform",
+    "category": "AI / ML",
+    "description": "God's Eye is an AI-powered trading platform that predicts stock market trends using machine learning and real-time data analysis. It combines historical data, technical indicators, and sentiment analysis to generate accurate buy/sell signals. The platform helps users make smarter investment decisions with automated insights and risk evaluation. Designed for both beginners and experienced traders, it minimizes human bias and enhances trading efficiency through intelligent automation.",
+    "image": "godsEye.jpeg",
+    "url": null,
+    "tags": ["Full-Stack", "AI", "Trading"]
+  },
+  {
+    "id": "whatsapp-ai",
+    "order": 18,
+    "title": "WhatsApp AI",
+    "category": "AI / ML",
+    "description": "An intelligent WhatsApp automation engine that operates entirely independent of the Meta Developer API. Leverages AI-driven conversation flows, smart auto-replies, scheduled messaging, and natural language processing to automate customer interactions, lead generation, and support — all without requiring official API credentials or developer accounts.",
+    "image": "whatsapp-ai.png",
+    "url": null,
+    "tags": ["AI/ML", "Automation", "Messaging"]
+  },
+  {
+    "id": "seizure-sense",
+    "order": 19,
+    "title": "Seizure Sense",
+    "category": "AI / ML",
+    "description": "An AI/ML-based system that analyzes brain signals (EEG data) to predict epileptic seizures in advance. It alerts the patient before an attack, allowing them to move to a safe environment and reduce the risk of injury.",
+    "image": "ai_project.png",
+    "url": null,
+    "tags": ["AI/ML", "Healthcare", "Python"]
+  },
+  {
+    "id": "novasuite",
+    "order": 20,
+    "title": "NovaSuite – AI SaaS Platform",
+    "category": "AI / ML",
+    "description": "A powerful AI SaaS platform offering image generation, blog suggestions, background removal, resume review, and disease diagnostics—streamlining work through smart automation.",
+    "image": "web_project1.png",
+    "url": null,
+    "tags": ["AI/ML", "SaaS", "Web Development"]
+  },
+  {
+    "id": "smart-dual-finance",
+    "order": 21,
+    "title": "Smart Dual Finance",
+    "category": "AI / ML",
+    "description": "A versatile finance management application supporting dual-mode operation across personal budgeting and business accounting settings.",
+    "image": "cyber_project1.png",
+    "url": null,
+    "tags": ["Full-Stack", "Finance", "CyberSecurity"]
+  },
+  {
+    "id": "prodwatch-plc",
+    "order": 22,
+    "title": "ProdWatch PLC",
+    "category": "AI / ML",
+    "description": "An AI-powered factory monitoring system that tracks item counts, enforces speed limits, and ensures real-time compliance with operational and safety standards.",
+    "image": "prodwatch-plc.png",
+    "url": null,
+    "tags": ["AI/ML", "Industrial", "Automation"]
+  },
+  {
+    "id": "echomind",
+    "order": 23,
+    "title": "EchoMind",
+    "category": "AI / ML",
+    "description": "EchoMind is a lightweight macOS background service that captures system and microphone audio to deliver real-time transcription with APIs for seamless integration and automation.",
+    "image": "echomind.png",
+    "url": null,
+    "tags": ["AI/ML", "macOS", "Transcription"]
+  },
+  {
+    "id": "platevision-ai",
+    "order": 24,
+    "title": "PlateVision AI",
+    "category": "AI / ML",
+    "description": "An affordable AI-powered automatic number plate recognition (ANPR) system that delivers high-performance vehicle tracking and identification using cost-effective camera hardware without compromising accuracy.",
+    "image": "platevision.png",
+    "url": null,
+    "tags": ["AI/ML", "Computer Vision", "Security"]
+  },
+  {
+    "id": "haasil",
+    "order": 25,
+    "title": "Haasil",
+    "category": "E-Commerce",
+    "description": "Haasil is an e-commerce platform that offers a wide range of products, making it easy for customers to shop essentials online with convenience.",
+    "image": "hassil-web.png",
+    "url": "https://haasil.store/",
+    "tags": ["Full-Stack", "E-Commerce", "CMS"]
+  },
+  {
+    "id": "essence-ecommerce",
+    "order": 26,
+    "title": "Essence — Scalable E-commerce Platform",
+    "category": "E-Commerce",
+    "description": "A modern e-commerce app with smart search, secure checkout, and mobile-first design for smooth shopping across devices.",
+    "image": "web_project4.png",
+    "url": null,
+    "tags": ["Web Development", "E-Commerce", "UI/UX"]
+  },
+  {
+    "id": "shopify-admin",
+    "order": 27,
+    "title": "Shopify — Full-featured E-commerce & Admin Panel",
+    "category": "E-Commerce",
+    "description": "Complete solution with product management, orders, insights, and a sleek admin panel—fast and scalable.",
+    "image": "web_project5.png",
+    "url": null,
+    "tags": ["Full-Stack", "E-Commerce", "Admin Panel"]
+  },
+  {
+    "id": "smart-gate",
+    "order": 28,
+    "title": "Smart Gate",
+    "category": "IoT",
+    "description": "SmartGate is an intelligent, RFID-based automatic gate system designed to maximize security and operational efficiency. It streamlines access control for residential, commercial, and industrial environments through reliable RFID technology, ensuring secure and automated vehicle and pedestrian entry/exit management.",
+    "image": "smartgate.png",
+    "url": null,
+    "tags": ["Full-Stack", "Architecture", "IoT"]
+  }
+]
