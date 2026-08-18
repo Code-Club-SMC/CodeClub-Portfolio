@@ -7,7 +7,7 @@ import OurTeam from "./pages/OurTeam";
 import OurVision from "./pages/OurVision";
 import CareerPage from "./pages/Careers";
 import FooterMain from "./components/footer/FooterMain";
-import Navbar from "./components/header/Navbar";
+import Navbar from "./components/Navbar";
 import CaseStudies from "./pages/CaseStudies";
 import Contact from "./pages/Contact";
 

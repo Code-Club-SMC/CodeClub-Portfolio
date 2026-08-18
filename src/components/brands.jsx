@@ -5,31 +5,36 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 
-// Framer Motion
+
 import { motion } from "framer-motion";
 
 // Images
-import brand1 from "../../assets/brand1.png";
-import brand2 from "../../assets/brand2.png";
-import brand3 from "../../assets/brand3.png";
-import brand4 from "../../assets/brand4.jpeg";
-import brand5 from "../../assets/brand5.jpeg";
-import brand6 from "../../assets/brand6.png";
-import brand7 from "../../assets/brand7.jpg";
-import brand8 from "../../assets/brand8.png";
-import brand9 from "../../assets/brand9.jpg";
-import brand10 from "../../assets/brand10.jpg";
-import brand11 from "../../assets/brand11.jpeg";
-import win from "../../assets/win.jpg";
-import swash from "../../assets/s-wash.jpg";
-import edwardian from "../../assets/edwardian.jpg";
-import genius from "../../assets/gca.jpg";
-import sca from "../../assets/sca.jpg";
-import skill from "../../assets/skill.jpg";
-import lavita from "../../assets/lavita.jpg";
-import pyramids from "../../assets/pyramids.jpg";
-import psx from "../../assets/pakistan-stock.jpg";
-import edge from "../../assets/edge.jpg";
+import brand1 from "../assets/brand1.png";
+import brand2 from "../assets/brand2.png";
+import brand3 from "../assets/brand3.png";
+import brand4 from "../assets/brand4.jpeg";
+import brand5 from "../assets/brand5.jpeg";
+import brand6 from "../assets/brand6.png";
+import brand7 from "../assets/brand7.jpg";
+import brand8 from "../assets/brand8.png";
+import brand9 from "../assets/brand9.jpg";
+import brand10 from "../assets/brand10.jpg";
+import brand11 from "../assets/brand11.jpeg";
+import Allfix from "../assets/Allfix.jpeg";
+import FeatherStartCarWash from "../assets/FeatherStartCarWash.jpeg";
+import LEOLearning from "../assets/LEOLearning.jpeg";
+import CelesteinnHotel from "../assets/CelesteinnHotel.jpeg";
+import GLEAMUkPremiumCarWash from "../assets/GLEAMUkPremiumCarWash.png";
+import win from "../assets/win.jpg";
+import GeoWash from "../assets/GEOWash.jpeg";
+import edwardian from "../assets/edwardian.jpg";
+import genius from "../assets/gca.jpg";
+import sca from "../assets/sca.jpg";
+import skill from "../assets/skill.jpg";
+import lavita from "../assets/lavita.jpg";
+import pyramids from "../assets/pyramids.jpg";
+import psx from "../assets/pakistan-stock.jpg";
+import edge from "../assets/edge.jpg";
 
 // Brand data
 const brands = [
@@ -45,7 +50,7 @@ const brands = [
   { name: "Federal Youth Parliment", image: brand9 },
   { name: "Zamong Khyber Pvt Ltd.", image: brand4 },
   { name: "Imsciences (cdc).", image: win },
-  { name: "S-wash.", image: swash },
+  { name: "GEO-Wash.", image: GeoWash },
   { name: "Edwardian Coaching Academy.", image: edwardian },
   { name: "Genius Coaching Academy.", image: genius },
   { name: "Standard Coaching Academy.", image: sca },
@@ -54,6 +59,12 @@ const brands = [
   { name: "Pyramids website.", image: pyramids },
   { name: "Pakistan Stock exchange", image: psx },
   { name: "Edge Cutting Group.", image: edge },
+  { name: "ALLFIX Maintenance Services", image: Allfix },
+  { name: "Feather Start Car Wash", image: FeatherStartCarWash },
+  { name: "LEO Learning", image: LEOLearning },
+  { name: "Celesteinn Hotel", image: CelesteinnHotel },
+  { name: "GLEAM Uk Premium Car Wash", image: GLEAMUkPremiumCarWash },
+
 ];
 
 // Fade animation

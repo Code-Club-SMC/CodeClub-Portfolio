@@ -5,11 +5,11 @@ import CursorDot from "../components/CursorDot";
 import DifferenceMain from "../components/DifferenceMain";
 import GuidanceMain from "../components/Guidance";
 import ExpertiseMain from "../components/ExpertiseMain";
-import NumbersMain from "../components/numbers/NumbersMain";
-import ServicesMain from "../components/services/ServicesMain";
+import NumbersMain from "../components/NumbersMain";
+import ServicesMain from "../components/ServicesMain";
 import ContactMain from "../components/contact/contactMain";
 import UnlockComponent from "../components/UnlockComponent";
-import Brands from "../components/brands/brands";
+import Brands from "../components/brands";
 
 
 const Index = () => {

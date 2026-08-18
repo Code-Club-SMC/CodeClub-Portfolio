@@ -4,12 +4,12 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 // Import images
-import AI from '../../assets/AiExperties.png';
-import web from "../../assets/WebDevExpertise.png";
-import app from "../../assets/appExpertise.webp";
-import uiux from "../../assets/UIUXExpertise.png";
-import cyber from "../../assets/CyberSecurityExpertise.png";
-import iot from "../../assets/iotExp.png";
+import AI from '../assets/AiExperties.png';
+import web from "../assets/WebDevExpertise.png";
+import app from "../assets/appExpertise.webp";
+import uiux from "../assets/UIUXExpertise.png";
+import cyber from "../assets/CyberSecurityExpertise.png";
+import iot from "../assets/iotExp.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -441,19 +441,26 @@ const ExpertiseMain = () => {
 
   useEffect(() => {
     if (isLargeScreen && containerRef.current) {
+      let refreshOnceSettled;
+
       const timer = setTimeout(() => {
         // Get all panel sections
         const panels = containerRef.current.querySelectorAll('.panel-section');
 
-        // Create a pin ScrollTrigger for each panel
+        // Only pin the expertise panels that need the stacked/sticky effect.
+        // The last panel should never remain fixed after it reaches the end of
+        // the screen, otherwise it blocks the next section (e.g. NumbersMain)
+        // from coming in at the correct moment.
         panels.forEach((panel, index) => {
+          if (index === panels.length - 1) return;
+
           ScrollTrigger.create({
             trigger: panel,
             start: "top top",
+            end: "bottom top",
             pin: true,
-            pinSpacing: false, // Remove extra scrolling space
-            end: `+=${window.innerHeight * 2}`,
-            anticipatePin: 1,
+            pinSpacing: false,
+            anticipatePin: 0.1,
             id: `panel-${index}`,
           });
         });
@@ -461,10 +468,28 @@ const ExpertiseMain = () => {
         // Refresh ScrollTrigger so every trigger (pins + each section's
         // own reveal animation) recalculates against final layout
         ScrollTrigger.refresh();
+
+        // The measurement above happens 300ms after mount, which is a
+        // guess — if the expertise images or any webfonts are still
+        // loading past that point, their eventual size shifts the page
+        // height *after* GSAP already reserved space for the last
+        // panel's pin+release. That mismatch is what makes the next
+        // component (e.g. NumbersMain) start too early and visually
+        // overlap the tail of this section. Refresh once more the
+        // moment everything has actually finished loading, so the
+        // reserved space matches the real, final layout.
+        refreshOnceSettled = () => ScrollTrigger.refresh();
+        window.addEventListener("load", refreshOnceSettled);
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(refreshOnceSettled);
+        }
       }, 300);
 
       return () => {
         clearTimeout(timer);
+        if (refreshOnceSettled) {
+          window.removeEventListener("load", refreshOnceSettled);
+        }
         // Clean up all ScrollTriggers
         ScrollTrigger.getAll().forEach((trigger) => {
           if (trigger.vars?.id?.startsWith('panel-') || 
@@ -543,9 +568,10 @@ const ExpertiseMain = () => {
       {sections.map((section, index) => (
         <div 
           key={section.id} 
-          className="panel-section w-full h-screen"
+          className="panel-section relative w-full h-screen overflow-hidden bg-[#f4f8ff]"
+          style={{ zIndex: 10 + index }}
         >
-          <div className="w-full h-full">
+          <div className="w-full h-full bg-[#f4f8ff]">
             <ExperiseComponent
               img={section.img}
               name={section.name}
