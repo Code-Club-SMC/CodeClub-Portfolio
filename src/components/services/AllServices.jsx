@@ -5,7 +5,7 @@ import mobile from "../../assets/mobileDevService.webp";
 import web from "../../assets/webDevService.webp";
 import it_consulting from "../../assets/it_consulting.webp";
 import software_development from "../../assets/software_development.webp";
-import ioT from "../../assets/ioT.webp";
+// import ioT from "../../assets/ioT.webp";
 import data_analytics from "../../assets/data_analytics.webp";
 
 const services = [
@@ -36,7 +36,7 @@ const services = [
   },
   {
     title: "IoT Solutions",
-    icon: ioT,
+    // icon: ioT,
     link: "/service/iot",
   },
 ];

@@ -226,7 +226,7 @@ const Navbar = () => {
             className="w-10 rounded-full object-cover"
           />
           <span className="text-xl lg:block sm:block sm:text-2xl md:hidden font-bold">
-            CodeClub
+            Code Club
           </span>
         </div>
 
