@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import vid from "../../assets/main-old-video.mp4";
+import vid from "../../assets/home/main-old-video.mp4";
 import "./HeroSection.css";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logos/logo.png";
 import gsap from "gsap";
 
 const HeroPic = () => {

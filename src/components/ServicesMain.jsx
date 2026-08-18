@@ -3,12 +3,12 @@ import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 
 // Import images
-import AI from "../assets/ai_service.webp";
-import mobile from "../assets/mobileDevService.webp";
-import web from "../assets/webDevService.webp";
-import it_consulting from "../assets/it_consulting.webp";
-import software_development from "../assets/software_development.webp";
-import ioT from "../assets/IoT.webp";
+import AI from "../assets/services/ai_service.webp";
+import mobile from "../assets/services/mobileDevService.webp";
+import web from "../assets/services/webDevService.webp";
+import it_consulting from "../assets/services/it_consulting.webp";
+import software_development from "../assets/services/software_development.webp";
+import ioT from "../assets/expertise/IoT.webp";
 
 // Services data
 const services = [

@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import teamImage from "../assets/aboutus2.jpg";
+import teamImage from "../assets/about/aboutus2.jpg";
 import UnlockComponent from "../components/UnlockComponent";
 
 const stats = [

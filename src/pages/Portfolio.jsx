@@ -6,7 +6,7 @@ import UnlockComponent from "../components/UnlockComponent";
 import portfolioProjects from "../data/portfolioProjects.json";
 
 // Vite dynamic image import
-const imageModules = import.meta.glob("../assets/*.{jpeg,jpg,png,webp}", {
+const imageModules = import.meta.glob("../assets/portfolio/*.{jpeg,jpg,png,webp}", {
   eager: true,
 });
 

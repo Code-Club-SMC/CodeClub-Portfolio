@@ -1,23 +1,23 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-import web_project1 from "../../assets/web_project1.png";
-import web_project2 from "../../assets/web_project2.png";
-import web_project3 from "../../assets/web_project3.png";
-import web_project4 from "../../assets/web_project4.png";
-import web_project5 from "../../assets/web_project5.png";
-import web_project6 from "../../assets/web_project6.png";
-import web_project7 from "../../assets/web-project7.png";
-import web_project8 from "../../assets/web-project8.png";
-import hasil from "../../assets/web-hassil.jpg";
+import web_project1 from "../../assets/portfolio/web_project1.png";
+import web_project2 from "../../assets/portfolio/web_project2.png";
+import web_project3 from "../../assets/portfolio/web_project3.png";
+import web_project4 from "../../assets/portfolio/web_project4.png";
+import web_project5 from "../../assets/portfolio/web_project5.png";
+import web_project6 from "../../assets/portfolio/web_project6.png";
+import web_project7 from "../../assets/portfolio/web-project7.png";
+import web_project8 from "../../assets/portfolio/web-project8.png";
+import hasil from "../../assets/portfolio/web-hassil.jpg";
 
-import ai_project from "../../assets/ai_project.png";
-import app_project from "../../assets/app_project.png";
-import app_project2 from "../../assets/app_project2.png";
-import app_project3 from "../../assets/app_project3.png";
-import cyber_project1 from "../../assets/cyber_project1.png";
-import App5 from "../../assets/App_project5.jpg";
-import App6 from "../../assets/psc-app.jpeg";
+import ai_project from "../../assets/portfolio/ai_project.png";
+import app_project from "../../assets/portfolio/app_project.png";
+import app_project2 from "../../assets/portfolio/app_project2.png";
+import app_project3 from "../../assets/portfolio/app_project3.png";
+import cyber_project1 from "../../assets/portfolio/cyber_project1.png";
+import App5 from "../../assets/portfolio/App_project5.jpg";
+import App6 from "../../assets/portfolio/psc-app.jpeg";
 const projects = [
 
    {

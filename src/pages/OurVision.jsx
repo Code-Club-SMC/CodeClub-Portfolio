@@ -1,5 +1,5 @@
 import React from "react";
-import ourvision from "../assets/ourvision.jpg"; // correct image file
+import ourvision from "../assets/about/ourvision.jpg"; // correct image file
 
 export default function VisionPage() {
     return (

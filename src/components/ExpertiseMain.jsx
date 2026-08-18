@@ -4,12 +4,12 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 // Import images
-import AI from '../assets/AiExperties.png';
-import web from "../assets/WebDevExpertise.png";
-import app from "../assets/appExpertise.webp";
-import uiux from "../assets/UIUXExpertise.png";
-import cyber from "../assets/CyberSecurityExpertise.png";
-import iot from "../assets/iotExp.png";
+import AI from '../assets/expertise/AiExperties.png';
+import web from "../assets/expertise/WebDevExpertise.png";
+import app from "../assets/expertise/appExpertise.webp";
+import uiux from "../assets/expertise/UIUXExpertise.png";
+import cyber from "../assets/expertise/CyberSecurityExpertise.png";
+import iot from "../assets/expertise/iotExp.png";
 
 gsap.registerPlugin(ScrollTrigger);
 

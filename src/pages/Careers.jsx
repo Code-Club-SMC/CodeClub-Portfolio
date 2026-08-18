@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import hero from "../assets/hero.jpg";
+import hero from "../assets/home/hero.jpg";
 import UnlockComponent from "../components/UnlockComponent";
 
 const jobs = [

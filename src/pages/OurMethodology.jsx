@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import scrumCycle from "../assets/development.avif";
-import agileIcons from "../assets/collabaration.webp";
-import methodologyImage from "../assets/methodolgy.jpg";
+import scrumCycle from "../assets/about/development.avif";
+import agileIcons from "../assets/about/collabaration.webp";
+import methodologyImage from "../assets/about/methodolgy.jpg";
 
 const cardVariant = {
   hidden: { opacity: 0, y: 40 },

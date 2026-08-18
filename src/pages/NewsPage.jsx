@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import news1 from "../assets/news1.jpeg";
-import news2 from "../assets/news2.jpg";
-import news3 from "../assets/new3.jpeg";
-import news4 from "../assets/news4.jpeg";
-import news6 from "../assets/news6.jpeg";
-import news5 from "../assets/news5.jpeg";
+import news1 from "../assets/news/news1.jpeg";
+import news2 from "../assets/news/news2.jpg";
+import news3 from "../assets/news/new3.jpeg";
+import news4 from "../assets/news/news4.jpeg";
+import news6 from "../assets/news/news6.jpeg";
+import news5 from "../assets/news/news5.jpeg";
 
 
 const newsData = [

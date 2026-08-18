@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FiMail, FiPhone } from "react-icons/fi";
 import { FaWhatsapp, FaMagnifyingGlassLocation } from "react-icons/fa6";
-import secp from "../../assets/secp.jfif";
+import secp from "../../assets/logos/secp.jfif";
 
 const FooterMain = () => {
   return (
