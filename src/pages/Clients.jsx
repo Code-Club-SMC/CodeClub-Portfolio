@@ -136,13 +136,6 @@ export default function Clients() {
 
         <div className="max-w-7xl mx-auto">
           <motion.div initial="hidden" animate="show" variants={stagger}>
-            <motion.div variants={fadeUp} className="flex items-center gap-4 mb-8">
-              <span className="h-px w-12 bg-gray-900" />
-              <span className="text-sm font-semibold uppercase tracking-[0.25em] text-gray-500">
-                Client Solutions
-              </span>
-            </motion.div>
-
             <motion.h1
               variants={fadeUp}
               className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.02]"
@@ -228,12 +221,6 @@ export default function Clients() {
             variants={fadeUp}
             className="mb-16"
           >
-            <div className="flex items-center gap-4 mb-6">
-              <span className="h-px w-12 bg-gray-900" />
-              <span className="text-sm font-semibold uppercase tracking-[0.25em] text-gray-500">
-                Selected Client Work
-              </span>
-            </div>
             <h2 className="text-5xl md:text-6xl font-bold">
               Real projects.
               <br />
