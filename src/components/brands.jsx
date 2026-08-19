@@ -37,7 +37,7 @@ import psx from "../assets/misc/pakistan-stock.jpg";
 import edge from "../assets/brands/edge.jpg";
 
 // Brand data
-const brands = [
+export const brands = [
   { name: "Peshawar Services Club", image: brand10 },
   { name: "Haasil Pvt Ltd.", image: brand11 },
   { name: "Memaar Pvt Ltd.", image: brand1 },

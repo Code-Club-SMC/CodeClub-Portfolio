@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import CursorDot from "./components/CursorDot";
@@ -27,36 +26,6 @@ import "swiper/css/pagination";
 
 
 function App() {
-  const lastScroll = useRef(0);
-
-  useEffect(() => {
-    const footer = document.querySelector("footer");
-
-    const handleScroll = () => {
-      if (!footer) return;
-
-      const rect = footer.getBoundingClientRect();
-      const footerTop = rect.top + window.scrollY;
-      const scrollTop = window.scrollY;
-      const scrollDir = scrollTop > lastScroll.current ? "down" : "up";
-
-      // If user is scrolling down and footer is about to go out of view
-      if (
-        scrollDir === "down" &&
-        window.innerHeight + scrollTop >= footerTop + footer.offsetHeight
-      ) {
-        window.scrollTo({ top: lastScroll.current, behavior: "auto" });
-        return;
-      }
-
-      // Save last valid scroll position
-      lastScroll.current = scrollTop;
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <Router>
       <div className="flex flex-col ">
