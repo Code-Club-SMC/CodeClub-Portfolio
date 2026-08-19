@@ -7,7 +7,7 @@ import GuidanceMain from "../components/Guidance";
 import ExpertiseMain from "../components/ExpertiseMain";
 import NumbersMain from "../components/NumbersMain";
 import ServicesMain from "../components/ServicesMain";
-import ContactMain from "../components/contact/contactMain";
+import ContactMain from "../components/contactMain";
 import UnlockComponent from "../components/UnlockComponent";
 import Brands from "../components/brands";
 

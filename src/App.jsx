@@ -20,6 +20,7 @@ import IdeaToLaunch from "./pages/Idea";
 import ScrollToTop from "./components/scrollToTop";
 import NewsPage from "./pages/NewsPage";
 import Portfolio from "./pages/Portfolio";
+import Clients from "./pages/Clients";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -68,6 +69,7 @@ function App() {
             <Route path="/vision" element={<OurVision />} />
             <Route path="/careers" element={<CareerPage />} />
             <Route path="/caseStudies" element={<Portfolio />} />
+            <Route path="/clients" element={<Clients />} />
             <Route path="/methodology" element={<OurMethodology />} />
             <Route path="/development" element={<DevelopmentApproach />} />
             <Route path="/launch" element={<IdeaToLaunch />} />
@@ -77,11 +79,9 @@ function App() {
             <Route path="/about" element={<AboutUsSection />} />
             <Route path="/service/:slug" element={<Service />} />
             <Route path="/news" element={<NewsPage />} />
-            {/* <Route path="/portfolio" element={<Portfolio />} /> */}
           </Routes>
         </main>
         <FooterMain />
-        {/* <Helper /> */}
         <CursorDot />
       </div>
     </Router>

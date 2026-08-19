@@ -100,11 +100,6 @@ const NumberStat = ({ item, index }) => {
         item.highlight ? "bg-white/[0.04]" : ""
       }`}
     >
-      {/* index mark */}
-      <span className="absolute top-5 right-5 font-mono text-[11px] text-white/15 group-hover:text-white/50 transition-colors duration-500">
-        0{index + 1}
-      </span>
-
       {/* badge for the flagged stat */}
       {item.highlight && (
         <span className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-blue-400/30 bg-blue-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-blue-300 group-hover:border-white/40 group-hover:bg-white/10 group-hover:text-white transition-colors duration-500">

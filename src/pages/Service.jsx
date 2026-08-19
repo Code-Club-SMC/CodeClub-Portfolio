@@ -1,13 +1,392 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import StatsMain from "../components/statsCard/statsMain";
-import FeatureCard from "../components/expertiseCard/FeatureCard";
-import TechComp from "../components/techComp/TechComp";
-import IndComp from "../components/industryComp/IndComp";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useParams } from "react-router-dom";
 import { serviceMap } from "./ServiceData";
-import UnlockComponent from "../components/UnlockComponent";
-import { motion } from "framer-motion";
-import { FaLinkedin } from "react-icons/fa";
+import { motion, useInView, animate } from "framer-motion";
+import {
+  FaLinkedin,
+  FaShoppingCart,
+  FaFileAlt,
+  FaUsers,
+  FaLaptopCode,
+  FaChartLine,
+  FaShieldAlt,
+  FaCloud,
+  FaCogs,
+  FaCheckCircle,
+  FaDollarSign,
+  FaHeartbeat,
+  FaShoppingBag,
+  FaBriefcase,
+  FaArrowRight,
+} from "react-icons/fa";
+
+/* ---------------------------------------------------
+   Shared animation variants — reused across the page so
+   every section feels consistent.
+--------------------------------------------------- */
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.9 },
+  show: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: "easeOut" } },
+};
+
+const staggerContainer = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
+
+const viewportOnce = { once: true, amount: 0.2 };
+
+/* ---------------------------------------------------
+   Tech ribbon icon
+--------------------------------------------------- */
+const TechComp = ({ icon, name }) => {
+  return (
+    <div
+      title={name}
+      className="flex-shrink-0 flex flex-col items-center justify-center bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 w-20 h-20 md:w-25 md:h-25 lg:w-30 lg:h-30 mx-4"
+    >
+      <div className="flex items-center justify-center w-[70%] h-[70%]">
+        <img src={icon} alt={name} className="w-full h-full object-contain" />
+      </div>
+    </div>
+  );
+};
+
+/* ---------------------------------------------------
+   Feature Card — bento-style with icon badge, accent
+   glow border and animated checklist.
+--------------------------------------------------- */
+const featureIcons = [
+  FaShoppingCart,
+  FaFileAlt,
+  FaUsers,
+  FaLaptopCode,
+  FaChartLine,
+  FaShieldAlt,
+  FaCloud,
+  FaCogs,
+];
+
+const featureThemes = [
+  { grad: "from-blue-500 to-cyan-400", glow: "group-hover:shadow-blue-300/60" },
+  { grad: "from-purple-500 to-fuchsia-400", glow: "group-hover:shadow-purple-300/60" },
+  { grad: "from-emerald-500 to-teal-400", glow: "group-hover:shadow-emerald-300/60" },
+];
+
+const FeatureCard = ({ title, items, idx = 0 }) => {
+  const Icon = featureIcons[idx % featureIcons.length];
+  const theme = featureThemes[idx % featureThemes.length];
+
+  return (
+    <motion.div
+      variants={fadeUp}
+      whileHover={{ y: -10 }}
+      className={`group relative w-full max-w-sm rounded-3xl bg-white border border-gray-100 shadow-md hover:shadow-2xl ${theme.glow} transition-all duration-500 overflow-hidden p-8`}
+    >
+      {/* decorative blurred blob */}
+      <div
+        className={`absolute -top-10 -right-10 w-36 h-36 rounded-full bg-gradient-to-br ${theme.grad} opacity-10 group-hover:opacity-20 blur-2xl transition-opacity duration-500`}
+      />
+
+      <div
+        className={`relative z-10 w-16 h-16 rounded-2xl bg-gradient-to-br ${theme.grad} flex items-center justify-center shadow-lg mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500`}
+      >
+        <Icon className="text-white text-2xl" />
+      </div>
+
+      <h2 className="relative z-10 text-2xl font-bold text-gray-800 mb-5">
+        {title}
+      </h2>
+
+      <ul className="relative z-10 space-y-3">
+        {items.map((item, index) => (
+          <motion.li
+            key={index}
+            initial={{ opacity: 0, x: -12 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={viewportOnce}
+            transition={{ delay: index * 0.08, duration: 0.4 }}
+            className="flex items-start gap-3 text-gray-600 text-lg"
+          >
+            <FaCheckCircle className={`mt-1 flex-shrink-0 text-transparent bg-clip-text bg-gradient-to-br ${theme.grad}`} />
+            <span>{item}</span>
+          </motion.li>
+        ))}
+      </ul>
+
+      {/* bottom accent line that grows on hover */}
+      <div
+        className={`absolute bottom-0 left-0 h-1 w-0 group-hover:w-full bg-gradient-to-r ${theme.grad} transition-all duration-500`}
+      />
+    </motion.div>
+  );
+};
+
+/* ---------------------------------------------------
+   Industry card — glowing "aura" card
+--------------------------------------------------- */
+const auraThemes = [
+  {
+    grad: "from-blue-500 via-cyan-400 to-blue-500",
+    text: "text-blue-300",
+    ring: "group-hover:ring-blue-400/50",
+  },
+  {
+    grad: "from-purple-500 via-fuchsia-400 to-purple-500",
+    text: "text-purple-300",
+    ring: "group-hover:ring-purple-400/50",
+  },
+  {
+    grad: "from-emerald-500 via-teal-400 to-emerald-500",
+    text: "text-emerald-300",
+    ring: "group-hover:ring-emerald-400/50",
+  },
+];
+
+const pickIndustryIcon = (title = "") => {
+  const t = title.toLowerCase();
+  if (t.includes("fin")) return FaDollarSign;
+  if (t.includes("health")) return FaHeartbeat;
+  if (t.includes("commerce") || t.includes("retail")) return FaShoppingBag;
+  return FaBriefcase;
+};
+
+const IndComp = ({ title, items, idx = 0 }) => {
+  const theme = auraThemes[idx % auraThemes.length];
+  const Icon = pickIndustryIcon(title);
+
+  return (
+    <motion.div variants={fadeUp} className="group relative">
+      {/* pulsing aura glow behind the card */}
+      <motion.div
+        className={`absolute -inset-1 rounded-3xl bg-gradient-to-r ${theme.grad} opacity-30 blur-xl group-hover:opacity-60 transition-opacity duration-500`}
+        animate={{ opacity: [0.2, 0.4, 0.2] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      <div
+        className={`relative w-full max-w-sm rounded-3xl bg-gray-900 ring-1 ring-white/10 ${theme.ring} p-8 transition-all duration-500 group-hover:-translate-y-2`}
+      >
+        <div
+          className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${theme.grad} flex items-center justify-center mb-6 shadow-lg`}
+        >
+          <Icon className="text-white text-xl" />
+        </div>
+
+        <h2 className="text-2xl font-bold text-white mb-5">{title}</h2>
+
+        <ul className="space-y-3">
+          {items.map((item, index) => (
+            <li
+              key={index}
+              className="flex items-center gap-3 text-gray-300 text-lg"
+            >
+              <FaArrowRight className={`${theme.text} flex-shrink-0 text-sm`} />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </motion.div>
+  );
+};
+
+/* ---------------------------------------------------
+   Count-up number — resets to 0 and replays the count
+   every single time it scrolls into view.
+--------------------------------------------------- */
+const CountUp = ({ value }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { amount: 0.6 });
+  const [display, setDisplay] = useState("0");
+
+  const match = String(value).match(/(\d+)(.*)/);
+  const target = match ? parseInt(match[1], 10) : 0;
+  const suffix = match ? match[2] : "";
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(0, target, {
+        duration: 1.6,
+        ease: "easeOut",
+        onUpdate: (v) => setDisplay(Math.floor(v).toString()),
+      });
+      return () => controls.stop();
+    } else {
+      setDisplay("0");
+    }
+  }, [isInView, target]);
+
+  return (
+    <span ref={ref}>
+      {display}
+      {suffix}
+    </span>
+  );
+};
+
+const StatsMain = ({ number, label, title, description }) => {
+  return (
+    <motion.div
+      variants={fadeUp}
+      whileHover={{ y: -8, scale: 1.03 }}
+      className="bg-transparent rounded-xl p-6 max-w-sm shadow-md hover:shadow-2xl transition-all duration-300 ease-in-out"
+    >
+      <div className="relative text-7xl font-bold text-gray-900 mb-2">
+        <CountUp value={number} />
+      </div>
+      <p className="uppercase text-xs tracking-widest text-gray-600 mb-4">
+        {label}
+      </p>
+      <h3 className="text-2xl font-semibold text-gray-700 mb-2">{title}</h3>
+      <p className="text-lg text-gray-700">{description}</p>
+    </motion.div>
+  );
+};
+
+/* ---------------------------------------------------
+   Team card — flips on hover to reveal bio + linkedin
+--------------------------------------------------- */
+const teamThemes = [
+  "from-yellow-400 to-orange-400",
+  "from-blue-400 to-indigo-500",
+  "from-pink-400 to-rose-500",
+  "from-emerald-400 to-teal-500",
+];
+
+const getInitials = (name = "") =>
+  name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+const TeamCard = ({ member, idx }) => {
+  const theme = teamThemes[idx % teamThemes.length];
+
+  return (
+    <motion.div variants={fadeUp} className="group [perspective:1200px] h-80">
+      <div className="relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+        {/* Front */}
+        <div className="absolute inset-0 [backface-visibility:hidden] bg-white rounded-2xl shadow-md hover:shadow-xl flex flex-col items-center justify-center p-8 text-center">
+          <div
+            className={`w-24 h-24 rounded-full bg-gradient-to-br ${theme} flex items-center justify-center text-white text-3xl font-bold shadow-lg mb-5`}
+          >
+            {getInitials(member.name)}
+          </div>
+          <h2 className="text-xl font-semibold text-gray-800">
+            {member.name}
+          </h2>
+          <p className={`font-medium bg-gradient-to-r ${theme} bg-clip-text text-transparent`}>
+            {member.role}
+          </p>
+        </div>
+
+        {/* Back */}
+        <div
+          className={`absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-2xl shadow-xl bg-gradient-to-br ${theme} flex flex-col items-center justify-center p-8 text-center text-white`}
+        >
+          <h2 className="text-xl font-semibold mb-2">{member.name}</h2>
+          {member.bio && (
+            <p className="text-sm text-white/90 leading-relaxed">
+              {member.bio}
+            </p>
+          )}
+          {member.linkedin && (
+            <motion.a
+              whileHover={{ scale: 1.2, rotate: 8 }}
+              whileTap={{ scale: 0.9 }}
+              href={member.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center mt-6 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+            >
+              <FaLinkedin size={20} />
+            </motion.a>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+/* ---------------------------------------------------
+   Final CTA — animated aura background
+--------------------------------------------------- */
+const ServiceUnlockComponent = () => {
+  return (
+    <motion.div
+      initial="hidden"
+      whileInView="show"
+      viewport={viewportOnce}
+      variants={fadeUp}
+      className="relative text-center py-24 px-6 lg:px-40 bg-gray-950 overflow-hidden"
+    >
+      {/* rotating conic aura */}
+      <motion.div
+        className="absolute left-1/2 top-1/2 w-[900px] h-[900px] -translate-x-1/2 -translate-y-1/2 opacity-30"
+        style={{
+          background:
+            "conic-gradient(from 0deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6)",
+          filter: "blur(120px)",
+        }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+      />
+
+      {/* floating particles */}
+      {[...Array(10)].map((_, i) => (
+        <motion.span
+          key={i}
+          className="absolute w-1.5 h-1.5 rounded-full bg-white/40"
+          style={{
+            left: `${(i * 37) % 100}%`,
+            top: `${(i * 53) % 100}%`,
+          }}
+          animate={{ y: [0, -20, 0], opacity: [0.2, 0.8, 0.2] }}
+          transition={{
+            duration: 4 + (i % 3),
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 0.3,
+          }}
+        />
+      ))}
+
+      <motion.h2
+        variants={fadeUp}
+        className="relative z-10 text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-10 bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent"
+      >
+        Unlock the potential of your business with our expert services.
+      </motion.h2>
+
+      <motion.div variants={scaleIn} className="relative z-10 inline-block">
+        <Link to="/contact" className="group relative inline-block">
+          {/* pulsing glow ring */}
+          <motion.span
+            className="absolute inset-0 rounded-full bg-blue-500 blur-lg"
+            animate={{ opacity: [0.4, 0.8, 0.4], scale: [1, 1.08, 1] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <span className="relative flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xl font-semibold py-3 px-10 rounded-full shadow-lg group-hover:scale-105 transition-transform duration-300">
+            Contact Us
+            <FaArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
+          </span>
+        </Link>
+      </motion.div>
+    </motion.div>
+  );
+};
 
 const Service = () => {
   const { slug } = useParams();
@@ -19,7 +398,6 @@ const Service = () => {
     );
   }
 
-  const [tabOptions, setTabOptions] = useState([]);
   const [selected, setSelected] = useState("");
 
   useEffect(() => {
@@ -33,60 +411,84 @@ const Service = () => {
     }
   }, [slug]);
 
-
-
-
-
+  const ribbonIcons = currentService.techStack?.[selected] || [];
 
   return (
     <div className="mt-15 py-10">
       {/* Hero Section */}
-      <section
+      <motion.section
+        initial={{ opacity: 0, scale: 1.08 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1, ease: "easeOut" }}
         style={{
-          backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.5)), url(${currentService.bgImage})`,
+          backgroundImage: `url(${currentService.bgImage})`,
         }}
-        className="w-full flex flex-col justify-center items-center text-center px-5 py-28 text-white bg-cover bg-center bg-no-repeat"
-      >
-        <h1 className="font-berkshire text-[40px] leading-tight md:text-6xl md:leading-[70px] max-w-4xl">
-          {currentService.title}
-        </h1>
-        <p className="mt-4 text-base md:text-lg max-w-2xl">
-          {currentService.description}
-        </p>
-      </section>
+        className="w-full h-[280px] md:h-[360px] bg-cover bg-center bg-no-repeat"
+      />
 
       {/* Features Section */}
       <div className="p-20">
-        <h1 className="text-5xl font-bold text-gray-800 leading-tight uppercase">
+        <motion.h1
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={fadeUp}
+          className="text-5xl font-bold text-gray-800 leading-tight uppercase relative inline-block"
+        >
           {currentService.title} Expertise
-        </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10">
+          <motion.span
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={viewportOnce}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="absolute -bottom-2 left-0 h-1 w-full bg-blue-500 origin-left"
+          />
+        </motion.h1>
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={staggerContainer}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-14"
+        >
           {currentService.features.map((feature, idx) => (
             <FeatureCard
               key={idx}
+              idx={idx}
               title={feature.title}
               items={feature.items}
             />
           ))}
-        </div>
+        </motion.div>
       </div>
 
-
       {/* Tech Stack Section */}
-      <div className="flex flex-col gap-10 w-full h-full bg-indigo-900 text-white lg:p-20 md:p-20 sm:p-10 sm:pt-20">
-        <h1 className="uppercase font-bold lg:text-5xl md:text-5xl sm:text-4xl sm:text-center lg:text-start">
+      <div className="flex flex-col gap-8 w-full h-full bg-indigo-900 text-white lg:p-20 md:p-20 sm:p-10 sm:pt-20">
+        <motion.h1
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={fadeUp}
+          className="text-center uppercase font-bold lg:text-5xl md:text-5xl sm:text-4xl"
+        >
           Our Tech Stack
-        </h1>
+        </motion.h1>
 
         {/* Tabs */}
-        <div className="flex flex-wrap lg:justify-start md:justify-start sm:justify-center sm:items-center text-sm gap-2">
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={staggerContainer}
+          className="flex flex-wrap justify-center items-center text-sm gap-2"
+        >
           {Object.keys(currentService.techStack).map((key) => {
             const label = key
               .replace(/([A-Z])/g, " $1")
               .replace(/^./, (str) => str.toUpperCase());
 
             return (
-              <div className="flex items-center" key={key}>
+              <motion.div variants={fadeUp} className="flex items-center" key={key}>
                 <input
                   type="radio"
                   name="options"
@@ -95,111 +497,144 @@ const Service = () => {
                   checked={selected === key}
                   onChange={() => setSelected(key)}
                 />
-                <label
+                <motion.label
+                  whileHover={{ scale: 1.06 }}
+                  whileTap={{ scale: 0.96 }}
                   htmlFor={key}
                   className="cursor-pointer rounded-full py-2 px-6 text-lg transition-colors duration-200 peer-checked:bg-indigo-600 peer-checked:text-white bg-indigo-800 text-gray-300"
                 >
                   {label}
-                </label>
-              </div>
+                </motion.label>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
-        {/* Tech Cards */}
-        <div className="flex flex-wrap gap-6 mt-10 sm:justify-center lg:justify-start md:justify-start">
-          {currentService.techStack[selected]?.map(({ icon, name }, index) => (
-            <TechComp key={index} icon={icon} name={name} />
-          ))}
+        {/* Tech Ribbon — centered, infinite, 60% width, fades at both ends */}
+        <div className="mx-auto mt-4 w-[60vw] min-w-[280px] max-w-[900px] overflow-hidden rounded-[28px] border border-white/10 bg-white/5 shadow-[0_20px_60px_rgba(15,23,42,0.45)] backdrop-blur-sm [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+          {ribbonIcons.length > 0 && (
+            <motion.div
+              key={`${slug}-${selected}`}
+              className="flex w-max items-center py-5"
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{
+                duration: Math.max(ribbonIcons.length * 3, 14),
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            >
+              {[...ribbonIcons, ...ribbonIcons].map(({ icon, name }, index) => (
+                <div key={`${selected}-${index}`} className="flex-shrink-0">
+                  <TechComp icon={icon} name={name} />
+                </div>
+              ))}
+            </motion.div>
+          )}
         </div>
       </div>
 
-
       {/* Industries Section */}
       {currentService.industries && currentService.industries.length > 0 && (
-        <div className="w-full h-full lg:p-20 md:p-20 sm:p-10">
-          <h1 className="lg:text-5xl md:text-5xl sm:text-4xl font-bold text-gray-800 leading-tight uppercase">
+        <div className="w-full h-full lg:p-20 md:p-20 sm:p-10 bg-gray-950">
+          <motion.h1
+            initial="hidden"
+            whileInView="show"
+            viewport={viewportOnce}
+            variants={fadeUp}
+            className="lg:text-5xl md:text-5xl sm:text-4xl font-bold text-white leading-tight uppercase"
+          >
             Our Expertise Extends Across <br />
-            <span className="text-blue-600">Industries</span>
-          </h1>
-          <p className="lg:w-2/3 md:w-2/3 sm:w-full mt-5 text-gray-800 text-xl tracking-wider">
+            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              Industries
+            </span>
+          </motion.h1>
+          <motion.p
+            initial="hidden"
+            whileInView="show"
+            viewport={viewportOnce}
+            variants={fadeUp}
+            transition={{ delay: 0.15 }}
+            className="lg:w-2/3 md:w-2/3 sm:w-full mt-5 text-gray-400 text-xl tracking-wider"
+          >
             We have extensive experience across a wide range of industries. No
             matter your niche, partnering with us ensures high-quality,
             innovative solutions.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-12">
+          </motion.p>
+          <motion.div
+            initial="hidden"
+            whileInView="show"
+            viewport={viewportOnce}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14 mt-16"
+          >
             {currentService.industries.map((section, index) => (
               <IndComp
                 key={index}
+                idx={index}
                 title={section.title}
                 items={section.items}
               />
             ))}
-          </div>
+          </motion.div>
         </div>
       )}
 
       {/* Team Members Section */}
       <div className="bg-gray-100 py-16 px-6 lg:px-20">
-        <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">
+        <motion.h1
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={fadeUp}
+          className="text-4xl font-bold text-gray-800 mb-10 text-center"
+        >
           Meet the Team
-        </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
+        </motion.h1>
+  
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={staggerContainer}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto"
+        >
           {currentService.team.map((member, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 * idx }}
-              className="bg-gradient-to-br from-yellow-50 to-white border border-yellow-200 shadow-md rounded-2xl p-8 transition-all hover:scale-105 hover:shadow-yellow-300 text-center"
-            >
-              <h2 className="text-xl font-semibold text-gray-800">
-                {member.name}
-              </h2>
-              <p className="text-yellow-700 font-medium">{member.role}</p>
-              {member.bio && (
-                <p className="text-gray-600 mt-3 text-sm">{member.bio}</p>
-              )}
-              {member.linkedin && (
-                <a
-                  href={member.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block mt-3 text-yellow-700 hover:text-yellow-900"
-                >
-                  <FaLinkedin size={20} />
-                </a>
-              )}
-            </motion.div>
+            <TeamCard key={idx} member={member} idx={idx} />
           ))}
-        </div>
+        </motion.div>
       </div>
 
       {/* Stats Section */}
       <div className="bg-blue-100 p-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10 w-full h-full px-10 py-10">
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          variants={staggerContainer}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10 w-full h-full px-10 py-10"
+        >
           <StatsMain
-            number="12+"
-            label="DELIVERED PROJECTS"
+            number="99+"
+            label="COMPLETED PROJECTS"
             title="Successfully Delivered Projects"
             description="We've helped numerous startups and established businesses to launch their products or revise existing solutions."
           />
           <StatsMain
-            number="100%"
-            label="CLIENT SATISFACTION"
-            title="Happy Clients"
+            number="18+"
+            label="EXPERTS"
+            title="Industry Experts"
             description="Our commitment to excellence is proven by the satisfaction of our diverse client base."
           />
           <StatsMain
-            number="10+"
-            label="EXPERTS"
-            title="Industry Experts"
+            number="98.95%"
+            label="CLIENT SATISFACTION"
+            title="Happy Clients"
             description="Our team consists of skilled professionals with years of experience in the industry."
           />
-        </div>
+        </motion.div>
       </div>
 
-      <UnlockComponent />
+      <ServiceUnlockComponent />
     </div>
   );
 };

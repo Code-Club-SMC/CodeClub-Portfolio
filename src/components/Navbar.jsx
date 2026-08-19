@@ -94,6 +94,7 @@ const menuData = {
       icon: <FaBriefcase />,
     },
   ],
+  "Our Clients": [],
   "Case Studies": [],
 };
 
@@ -127,6 +128,8 @@ const getPath = (item) => {
       return "/caseStudies";
     case "news":
       return "/news";
+    case "our clients":
+      return "/clients";
     default:
       return "#";
   }
@@ -180,7 +183,7 @@ const Navbar = () => {
   };
 
   const handleMenuEnter = (label) => {
-    if (label === "Case Studies" || label === "Portfolio") return;
+    if (label === "Our Clients" || label === "Case Studies" || label === "Portfolio") return;
     handleMouseEnter();
     clearTimeout(timeoutRef.current);
     setActiveMenu(label);
@@ -239,7 +242,7 @@ const Navbar = () => {
                 onMouseEnter={() => handleMenuEnter(label)}
                 onMouseLeave={handleMenuLeave}
               >
-                {label === "Case Studies" || label === "Portfolio" ? (
+                {label === "Our Clients" || label === "Case Studies" || label === "Portfolio" ? (
                   <Link
                     to={getPath(label)}
                     className="flex items-center cursor-pointer hover:text-blue-600 transition-all"
@@ -253,7 +256,7 @@ const Navbar = () => {
                   </div>
                 )}
 
-                {activeMenu === label && label !== "Case Studies" && label !== "Portfolio" && (
+                {activeMenu === label && label !== "Our Clients" && label !== "Case Studies" && label !== "Portfolio" && (
                   <div
                     className="fixed left-0 top-full w-full bg-white shadow-lg border-t border-gray-400 z-40"
                     onMouseEnter={() => handleMenuEnter(label)}
@@ -310,7 +313,7 @@ const Navbar = () => {
           <ul className="flex flex-col gap-4">
             {Object.entries(menuData).map(([label, submenu]) => (
               <li key={label} className="border-b border-gray-200 pb-3">
-                {label === "Case Studies" || label === "Portfolio" ? (
+                {label === "Our Clients" || label === "Case Studies" || label === "Portfolio" ? (
                   // Direct link for Case Studies (no dropdown)
                   <Link
                     to={getPath(label)}

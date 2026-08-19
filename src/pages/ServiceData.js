@@ -45,12 +45,12 @@ import {
 import { SiDotnet, SiElixir, SiNestjs } from "react-icons/si";
 import { FaNodeJs, FaAngular, FaPython, FaJava, FaLinux } from "react-icons/fa";
 import { TbBrandReact } from "react-icons/tb";
-import mobImg from "../assets/services/mobileService.webp";
-import webImg from "../assets/services/webService.jpg";
-import cyberImg from "../assets/misc/cyberService.jpg";
-import aiImg from "../assets/services/aiService.jpg";
-import uiImg from "../assets/services/uiuxService.jpg";
-import iotImg from "../assets/services/iotService.jpg";
+import mobImg from "../assets/files/service-heroes/AppDevelopment.png";
+import webImg from "../assets/files/service-heroes/WebDevelopment.png";
+import cyberImg from "../assets/files/service-heroes/Cybersecurity.png";
+import aiImg from "../assets/files/service-heroes/AI.png";
+import uiImg from "../assets/files/service-heroes/UIUX.png";
+import iotImg from "../assets/files/service-heroes/IoT.png";
 import { RiFirebaseFill } from "react-icons/ri";
 import { FaNode } from "react-icons/fa6";
 import icon1 from "../assets/misc/icon1.png";

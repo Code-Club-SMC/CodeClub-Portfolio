@@ -1,5 +1,5 @@
 import React from "react";
-import ContactMain from "../components/contact/contactMain";
+import ContactMain from "../components/contactMain";
 
 const Contact = () => {
   return (
