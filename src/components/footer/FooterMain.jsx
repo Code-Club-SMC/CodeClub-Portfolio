@@ -167,7 +167,7 @@ const FooterMain = () => {
           >
             <FaMagnifyingGlassLocation className="text-blue-600 text-xl mt-1 group-hover:text-blue-700 transition-colors" />
             <p className="group-hover:text-blue-700 transition-colors">
-              Liberty Mall Opp: Airport runway, University Rd, Tehkal,
+             Offic No.50 2nd floor Liberty Mall Opp: Airport runway, University Rd, Tehkal,
               Peshawar, 25000, Pakistan
             </p>
           </a>

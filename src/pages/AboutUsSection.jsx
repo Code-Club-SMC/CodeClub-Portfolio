@@ -174,7 +174,7 @@ const StatCard = ({ icon: Icon, theme, ring, value, label }) => (
       <div
         className={`absolute -inset-1 rounded-2xl bg-gradient-to-r ${theme} opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500`}
       />
-      <div className="relative bg-gray-50 border border-gray-200 p-8 rounded-2xl shadow-sm group-hover:shadow-xl group-hover:border-transparent transition-all duration-300 text-center">
+      <div className="relative bg-gray-50 border border-gray-200 p-6 sm:p-8 rounded-2xl shadow-sm group-hover:shadow-xl group-hover:border-transparent transition-all duration-300 text-center">
         <div className="relative w-14 h-14 mx-auto mb-5">
           <svg className="absolute -inset-3 w-20 h-20 -rotate-90" viewBox="0 0 100 100">
             <circle cx="50" cy="50" r="44" fill="none" strokeWidth="4" className="stroke-gray-200" />
@@ -511,7 +511,7 @@ export default function AboutUsSection() {
             whileInView="show"
             viewport={viewportOnce}
             variants={staggerContainer}
-            className="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10"
+            className="relative grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10"
           >
             {stats.map((stat, i) => (
               <StatCard
