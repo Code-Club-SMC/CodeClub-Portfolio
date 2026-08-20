@@ -519,19 +519,11 @@ const Service = () => {
           })}
         </motion.div>
 
-        {/* Tech Ribbon — centered, infinite, responsive width, fades at both ends */}
+        {/* Tech Ribbon — centered, responsive width, fades at both ends */}
         <div className="mx-auto mt-4 w-full sm:w-[80vw] md:w-[70vw] lg:w-[60vw] min-w-[280px] max-w-[900px] overflow-hidden rounded-[20px] md:rounded-[28px] border border-white/10 bg-white/5 shadow-[0_20px_60px_rgba(15,23,42,0.45)] backdrop-blur-sm [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
           {ribbonIcons.length > 0 && (
-            <div
-              className="flex items-center py-3 md:py-5"
-              style={{
-                animation: "tech-scroll linear infinite",
-                animationDuration: `${Math.max(ribbonIcons.length * 3, 14)}s`,
-                width: "max-content",
-                willChange: "transform",
-              }}
-            >
-              {[...ribbonIcons, ...ribbonIcons].map(({ icon, name }, index) => (
+            <div className="flex items-center justify-center flex-wrap gap-3 md:gap-4 py-3 md:py-5">
+              {ribbonIcons.map(({ icon, name }, index) => (
                 <div key={`${selected}-${index}`} className="flex-shrink-0">
                   <TechComp icon={icon} name={name} />
                 </div>
