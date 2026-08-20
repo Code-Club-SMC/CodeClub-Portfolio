@@ -52,9 +52,9 @@ const TechComp = ({ icon, name }) => {
   return (
     <div
       title={name}
-      className="flex-shrink-0 flex flex-col items-center justify-center bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 w-20 h-20 md:w-25 md:h-25 lg:w-30 lg:h-30 mx-4"
+      className="flex-shrink-0 flex flex-col items-center justify-center bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 mx-2 md:mx-3 lg:mx-4"
     >
-      <div className="flex items-center justify-center w-[70%] h-[70%]">
+      <div className="flex items-center justify-center w-[65%] h-[65%]">
         <img src={icon} alt={name} className="w-full h-full object-contain" />
       </div>
     </div>
@@ -90,24 +90,24 @@ const FeatureCard = ({ title, items, idx = 0 }) => {
     <motion.div
       variants={fadeUp}
       whileHover={{ y: -10 }}
-      className={`group relative w-full max-w-sm rounded-3xl bg-white border border-gray-100 shadow-md hover:shadow-2xl ${theme.glow} transition-all duration-500 overflow-hidden p-8`}
+      className={`group relative w-full rounded-3xl bg-white border border-gray-100 shadow-md hover:shadow-2xl ${theme.glow} transition-all duration-500 overflow-hidden p-6 md:p-8`}
     >
       {/* decorative blurred blob */}
       <div
-        className={`absolute -top-10 -right-10 w-36 h-36 rounded-full bg-gradient-to-br ${theme.grad} opacity-10 group-hover:opacity-20 blur-2xl transition-opacity duration-500`}
+        className={`absolute -top-10 -right-10 w-28 h-28 md:w-36 md:h-36 rounded-full bg-gradient-to-br ${theme.grad} opacity-10 group-hover:opacity-20 blur-2xl transition-opacity duration-500`}
       />
 
       <div
-        className={`relative z-10 w-16 h-16 rounded-2xl bg-gradient-to-br ${theme.grad} flex items-center justify-center shadow-lg mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500`}
+        className={`relative z-10 w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br ${theme.grad} flex items-center justify-center shadow-lg mb-4 md:mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500`}
       >
-        <Icon className="text-white text-2xl" />
+        <Icon className="text-white text-xl md:text-2xl" />
       </div>
 
-      <h2 className="relative z-10 text-2xl font-bold text-gray-800 mb-5">
+      <h2 className="relative z-10 text-lg md:text-xl lg:text-2xl font-bold text-gray-800 mb-4 md:mb-5">
         {title}
       </h2>
 
-      <ul className="relative z-10 space-y-3">
+      <ul className="relative z-10 space-y-2 md:space-y-3">
         {items.map((item, index) => (
           <motion.li
             key={index}
@@ -115,7 +115,7 @@ const FeatureCard = ({ title, items, idx = 0 }) => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={viewportOnce}
             transition={{ delay: index * 0.08, duration: 0.4 }}
-            className="flex items-start gap-3 text-gray-600 text-lg"
+            className="flex items-start gap-2 md:gap-3 text-gray-600 text-sm md:text-base lg:text-lg"
           >
             <FaCheckCircle className={`mt-1 flex-shrink-0 text-transparent bg-clip-text bg-gradient-to-br ${theme.grad}`} />
             <span>{item}</span>
@@ -174,23 +174,23 @@ const IndComp = ({ title, items, idx = 0 }) => {
       />
 
       <div
-        className={`relative w-full max-w-sm rounded-3xl bg-gray-900 ring-1 ring-white/10 ${theme.ring} p-8 transition-all duration-500 group-hover:-translate-y-2`}
+        className={`relative w-full rounded-3xl bg-gray-900 ring-1 ring-white/10 ${theme.ring} p-6 md:p-8 transition-all duration-500 group-hover:-translate-y-2`}
       >
         <div
-          className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${theme.grad} flex items-center justify-center mb-6 shadow-lg`}
+          className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br ${theme.grad} flex items-center justify-center mb-4 md:mb-6 shadow-lg`}
         >
-          <Icon className="text-white text-xl" />
+          <Icon className="text-white text-lg md:text-xl" />
         </div>
 
-        <h2 className="text-2xl font-bold text-white mb-5">{title}</h2>
+        <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-white mb-4 md:mb-5">{title}</h2>
 
-        <ul className="space-y-3">
+        <ul className="space-y-2 md:space-y-3">
           {items.map((item, index) => (
             <li
               key={index}
-              className="flex items-center gap-3 text-gray-300 text-lg"
+              className="flex items-center gap-2 md:gap-3 text-gray-300 text-sm md:text-base lg:text-lg"
             >
-              <FaArrowRight className={`${theme.text} flex-shrink-0 text-sm`} />
+              <FaArrowRight className={`${theme.text} flex-shrink-0 text-xs md:text-sm`} />
               <span>{item}</span>
             </li>
           ))}
@@ -239,16 +239,16 @@ const StatsMain = ({ number, label, title, description }) => {
     <motion.div
       variants={fadeUp}
       whileHover={{ y: -8, scale: 1.03 }}
-      className="bg-transparent rounded-xl p-6 max-w-sm shadow-md hover:shadow-2xl transition-all duration-300 ease-in-out"
+      className="bg-transparent rounded-xl p-4 md:p-6 w-full shadow-md hover:shadow-2xl transition-all duration-300 ease-in-out"
     >
-      <div className="relative text-7xl font-bold text-gray-900 mb-2">
+      <div className="relative text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-2">
         <CountUp value={number} />
       </div>
-      <p className="uppercase text-xs tracking-widest text-gray-600 mb-4">
+      <p className="uppercase text-[10px] md:text-xs tracking-widest text-gray-600 mb-3 md:mb-4">
         {label}
       </p>
-      <h3 className="text-2xl font-semibold text-gray-700 mb-2">{title}</h3>
-      <p className="text-lg text-gray-700">{description}</p>
+      <h3 className="text-lg md:text-xl lg:text-2xl font-semibold text-gray-700 mb-2">{title}</h3>
+      <p className="text-sm md:text-base lg:text-lg text-gray-700">{description}</p>
     </motion.div>
   );
 };
@@ -275,30 +275,30 @@ const TeamCard = ({ member, idx }) => {
   const theme = teamThemes[idx % teamThemes.length];
 
   return (
-    <motion.div variants={fadeUp} className="group [perspective:1200px] h-80">
+    <motion.div variants={fadeUp} className="group [perspective:1200px] h-64 md:h-72 lg:h-80">
       <div className="relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
         {/* Front */}
-        <div className="absolute inset-0 [backface-visibility:hidden] bg-white rounded-2xl shadow-md hover:shadow-xl flex flex-col items-center justify-center p-8 text-center">
+        <div className="absolute inset-0 [backface-visibility:hidden] bg-white rounded-2xl shadow-md hover:shadow-xl flex flex-col items-center justify-center p-4 md:p-8 text-center">
           <div
-            className={`w-24 h-24 rounded-full bg-gradient-to-br ${theme} flex items-center justify-center text-white text-3xl font-bold shadow-lg mb-5`}
+            className={`w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br ${theme} flex items-center justify-center text-white text-2xl md:text-3xl font-bold shadow-lg mb-3 md:mb-5`}
           >
             {getInitials(member.name)}
           </div>
-          <h2 className="text-xl font-semibold text-gray-800">
+          <h2 className="text-base md:text-lg lg:text-xl font-semibold text-gray-800">
             {member.name}
           </h2>
-          <p className={`font-medium bg-gradient-to-r ${theme} bg-clip-text text-transparent`}>
+          <p className={`text-sm md:text-base font-medium bg-gradient-to-r ${theme} bg-clip-text text-transparent`}>
             {member.role}
           </p>
         </div>
 
         {/* Back */}
         <div
-          className={`absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-2xl shadow-xl bg-gradient-to-br ${theme} flex flex-col items-center justify-center p-8 text-center text-white`}
+          className={`absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-2xl shadow-xl bg-gradient-to-br ${theme} flex flex-col items-center justify-center p-4 md:p-8 text-center text-white`}
         >
-          <h2 className="text-xl font-semibold mb-2">{member.name}</h2>
+          <h2 className="text-base md:text-lg lg:text-xl font-semibold mb-2">{member.name}</h2>
           {member.bio && (
-            <p className="text-sm text-white/90 leading-relaxed">
+            <p className="text-xs md:text-sm text-white/90 leading-relaxed">
               {member.bio}
             </p>
           )}
@@ -309,9 +309,9 @@ const TeamCard = ({ member, idx }) => {
               href={member.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center mt-6 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+              className="inline-flex items-center justify-center mt-4 md:mt-6 w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
             >
-              <FaLinkedin size={20} />
+              <FaLinkedin size={16} className="md:w-5 md:h-5" />
             </motion.a>
           )}
         </div>
@@ -330,11 +330,11 @@ const ServiceUnlockComponent = () => {
       whileInView="show"
       viewport={viewportOnce}
       variants={fadeUp}
-      className="relative text-center py-24 px-6 lg:px-40 bg-gray-950 overflow-hidden"
+      className="relative text-center py-16 md:py-20 lg:py-24 px-4 md:px-6 lg:px-20 xl:px-40 bg-gray-950 overflow-hidden"
     >
       {/* rotating conic aura */}
       <motion.div
-        className="absolute left-1/2 top-1/2 w-[900px] h-[900px] -translate-x-1/2 -translate-y-1/2 opacity-30"
+        className="absolute left-1/2 top-1/2 w-[600px] h-[600px] md:w-[700px] md:h-[700px] lg:w-[900px] lg:h-[900px] -translate-x-1/2 -translate-y-1/2 opacity-30"
         style={{
           background:
             "conic-gradient(from 0deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6)",
@@ -348,7 +348,7 @@ const ServiceUnlockComponent = () => {
       {[...Array(10)].map((_, i) => (
         <motion.span
           key={i}
-          className="absolute w-1.5 h-1.5 rounded-full bg-white/40"
+          className="absolute w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-white/40"
           style={{
             left: `${(i * 37) % 100}%`,
             top: `${(i * 53) % 100}%`,
@@ -365,7 +365,7 @@ const ServiceUnlockComponent = () => {
 
       <motion.h2
         variants={fadeUp}
-        className="relative z-10 text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-10 bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent"
+        className="relative z-10 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6 md:mb-10 bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent"
       >
         Unlock the potential of your business with our expert services.
       </motion.h2>
@@ -378,7 +378,7 @@ const ServiceUnlockComponent = () => {
             animate={{ opacity: [0.4, 0.8, 0.4], scale: [1, 1.08, 1] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
           />
-          <span className="relative flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xl font-semibold py-3 px-10 rounded-full shadow-lg group-hover:scale-105 transition-transform duration-300">
+          <span className="relative flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-base md:text-lg lg:text-xl font-semibold py-2.5 md:py-3 px-6 md:px-10 rounded-full shadow-lg group-hover:scale-105 transition-transform duration-300">
             Contact Us
             <FaArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
           </span>
@@ -394,7 +394,7 @@ const Service = () => {
 
   if (!currentService) {
     return (
-      <div className="text-center text-red-500 mt-21">Service not found.</div>
+      <div className="text-center text-red-500 mt-20 md:mt-24">Service not found.</div>
     );
   }
 
@@ -414,26 +414,35 @@ const Service = () => {
   const ribbonIcons = currentService.techStack?.[selected] || [];
 
   return (
-    <div className="mt-15 py-10">
+    <div className="mt-14 md:mt-16 lg:mt-20 py-6 md:py-10">
       {/* Hero Section */}
       <motion.section
         initial={{ opacity: 0, scale: 1.08 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, ease: "easeOut" }}
-        style={{
-          backgroundImage: `url(${currentService.bgImage})`,
+        className="w-full overflow-hidden -mt-px"
+        style={{ 
+          aspectRatio: "4/1",
+          maxHeight: "400px",
+          backgroundColor: "#0f1535",
         }}
-        className="w-full h-[280px] md:h-[360px] bg-cover bg-center bg-no-repeat"
-      />
+      >
+        <div
+          style={{
+            backgroundImage: `url(${currentService.bgImage})`,
+          }}
+          className="w-full h-full bg-cover bg-center bg-no-repeat"
+        />
+      </motion.section>
 
       {/* Features Section */}
-      <div className="p-20">
+      <div className="px-4 sm:px-6 md:px-10 lg:px-20 py-10 md:py-16 lg:py-20">
         <motion.h1
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
           variants={fadeUp}
-          className="text-5xl font-bold text-gray-800 leading-tight uppercase relative inline-block"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight uppercase relative inline-block"
         >
           {currentService.title} Expertise
           <motion.span
@@ -449,7 +458,7 @@ const Service = () => {
           whileInView="show"
           viewport={viewportOnce}
           variants={staggerContainer}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-14"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 lg:gap-10 mt-10 md:mt-14"
         >
           {currentService.features.map((feature, idx) => (
             <FeatureCard
@@ -463,13 +472,13 @@ const Service = () => {
       </div>
 
       {/* Tech Stack Section */}
-      <div className="flex flex-col gap-8 w-full h-full bg-indigo-900 text-white lg:p-20 md:p-20 sm:p-10 sm:pt-20">
+      <div className="flex flex-col gap-6 md:gap-8 w-full h-full bg-indigo-900 text-white px-4 sm:px-6 md:px-10 lg:px-20 py-10 md:py-16 lg:py-20">
         <motion.h1
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
           variants={fadeUp}
-          className="text-center uppercase font-bold lg:text-5xl md:text-5xl sm:text-4xl"
+          className="text-center uppercase font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl"
         >
           Our Tech Stack
         </motion.h1>
@@ -480,7 +489,7 @@ const Service = () => {
           whileInView="show"
           viewport={viewportOnce}
           variants={staggerContainer}
-          className="flex flex-wrap justify-center items-center text-sm gap-2"
+          className="flex flex-wrap justify-center items-center text-xs sm:text-sm gap-2 md:gap-3"
         >
           {Object.keys(currentService.techStack).map((key) => {
             const label = key
@@ -501,7 +510,7 @@ const Service = () => {
                   whileHover={{ scale: 1.06 }}
                   whileTap={{ scale: 0.96 }}
                   htmlFor={key}
-                  className="cursor-pointer rounded-full py-2 px-6 text-lg transition-colors duration-200 peer-checked:bg-indigo-600 peer-checked:text-white bg-indigo-800 text-gray-300"
+                  className="cursor-pointer rounded-full py-1.5 md:py-2 px-4 md:px-6 text-sm md:text-base lg:text-lg transition-colors duration-200 peer-checked:bg-indigo-600 peer-checked:text-white bg-indigo-800 text-gray-300"
                 >
                   {label}
                 </motion.label>
@@ -510,17 +519,16 @@ const Service = () => {
           })}
         </motion.div>
 
-        {/* Tech Ribbon — centered, infinite, 60% width, fades at both ends */}
-        <div className="mx-auto mt-4 w-[60vw] min-w-[280px] max-w-[900px] overflow-hidden rounded-[28px] border border-white/10 bg-white/5 shadow-[0_20px_60px_rgba(15,23,42,0.45)] backdrop-blur-sm [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+        {/* Tech Ribbon — centered, infinite, responsive width, fades at both ends */}
+        <div className="mx-auto mt-4 w-full sm:w-[80vw] md:w-[70vw] lg:w-[60vw] min-w-[280px] max-w-[900px] overflow-hidden rounded-[20px] md:rounded-[28px] border border-white/10 bg-white/5 shadow-[0_20px_60px_rgba(15,23,42,0.45)] backdrop-blur-sm [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
           {ribbonIcons.length > 0 && (
-            <motion.div
-              key={`${slug}-${selected}`}
-              className="flex w-max items-center py-5"
-              animate={{ x: ["0%", "-50%"] }}
-              transition={{
-                duration: Math.max(ribbonIcons.length * 3, 14),
-                repeat: Infinity,
-                ease: "linear",
+            <div
+              className="flex items-center py-3 md:py-5"
+              style={{
+                animation: "tech-scroll linear infinite",
+                animationDuration: `${Math.max(ribbonIcons.length * 3, 14)}s`,
+                width: "max-content",
+                willChange: "transform",
               }}
             >
               {[...ribbonIcons, ...ribbonIcons].map(({ icon, name }, index) => (
@@ -528,20 +536,20 @@ const Service = () => {
                   <TechComp icon={icon} name={name} />
                 </div>
               ))}
-            </motion.div>
+            </div>
           )}
         </div>
       </div>
 
       {/* Industries Section */}
       {currentService.industries && currentService.industries.length > 0 && (
-        <div className="w-full h-full lg:p-20 md:p-20 sm:p-10 bg-gray-950">
+        <div className="w-full h-full px-4 sm:px-6 md:px-10 lg:px-20 py-10 md:py-16 lg:py-20 bg-gray-950">
           <motion.h1
             initial="hidden"
             whileInView="show"
             viewport={viewportOnce}
             variants={fadeUp}
-            className="lg:text-5xl md:text-5xl sm:text-4xl font-bold text-white leading-tight uppercase"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight uppercase"
           >
             Our Expertise Extends Across <br />
             <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
@@ -554,7 +562,7 @@ const Service = () => {
             viewport={viewportOnce}
             variants={fadeUp}
             transition={{ delay: 0.15 }}
-            className="lg:w-2/3 md:w-2/3 sm:w-full mt-5 text-gray-400 text-xl tracking-wider"
+            className="w-full lg:w-2/3 mt-4 md:mt-5 text-gray-400 text-base md:text-lg lg:text-xl tracking-wider"
           >
             We have extensive experience across a wide range of industries. No
             matter your niche, partnering with us ensures high-quality,
@@ -565,7 +573,7 @@ const Service = () => {
             whileInView="show"
             viewport={viewportOnce}
             variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14 mt-16"
+            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-10 lg:gap-14 mt-10 md:mt-16"
           >
             {currentService.industries.map((section, index) => (
               <IndComp
@@ -580,13 +588,13 @@ const Service = () => {
       )}
 
       {/* Team Members Section */}
-      <div className="bg-gray-100 py-16 px-6 lg:px-20">
+      <div className="bg-gray-100 py-10 md:py-16 px-4 sm:px-6 md:px-10 lg:px-20">
         <motion.h1
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
           variants={fadeUp}
-          className="text-4xl font-bold text-gray-800 mb-10 text-center"
+          className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-8 md:mb-10 text-center"
         >
           Meet the Team
         </motion.h1>
@@ -596,7 +604,7 @@ const Service = () => {
           whileInView="show"
           viewport={viewportOnce}
           variants={staggerContainer}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-10 lg:gap-12 max-w-6xl mx-auto"
         >
           {currentService.team.map((member, idx) => (
             <TeamCard key={idx} member={member} idx={idx} />
@@ -605,13 +613,13 @@ const Service = () => {
       </div>
 
       {/* Stats Section */}
-      <div className="bg-blue-100 p-10">
+      <div className="bg-blue-100 p-4 sm:p-6 md:p-10">
         <motion.div
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
           variants={staggerContainer}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10 w-full h-full px-10 py-10"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10 mt-6 md:mt-10 w-full h-full px-2 sm:px-4 md:px-10 py-6 md:py-10"
         >
           <StatsMain
             number="99+"

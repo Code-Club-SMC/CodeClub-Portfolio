@@ -99,22 +99,31 @@ const NumberStat = ({ item, index }) => {
       className={`group relative flex flex-col items-center justify-center gap-3 py-16 px-6 border-b border-white/15 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0 transition-colors duration-500 hover:bg-[#0057d8] ${
         item.highlight ? "bg-white/[0.04]" : ""
       }`}
+      style={{
+        padding: "clamp(1rem, 2vw + 0.5rem, 4rem) clamp(0.75rem, 1.5vw + 0.25rem, 1.5rem)",
+        gap: "clamp(0.5rem, 0.5vw + 0.25rem, 1rem)",
+      }}
     >
       {/* badge for the flagged stat */}
       {item.highlight && (
-        <span className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-blue-400/30 bg-blue-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-blue-300 group-hover:border-white/40 group-hover:bg-white/10 group-hover:text-white transition-colors duration-500">
+        <span className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-blue-400/30 bg-blue-500/10 px-3 py-1 font-semibold uppercase tracking-widest text-blue-300 group-hover:border-white/40 group-hover:bg-white/10 group-hover:text-white transition-colors duration-500"
+          style={{ fontSize: "clamp(0.55rem, 0.15vw + 0.45rem, 0.65rem)" }}
+        >
           ● Most loved
         </span>
       )}
 
       <h3
         ref={numberRef}
-        className="text-5xl sm:text-6xl font-extrabold tracking-tighter bg-gradient-to-b from-white to-blue-200 bg-clip-text text-transparent group-hover:from-white group-hover:to-white transition-all duration-500"
+        className="font-extrabold tracking-tighter bg-gradient-to-b from-white to-blue-200 bg-clip-text text-transparent group-hover:from-white group-hover:to-white transition-all duration-500"
+        style={{ fontSize: "clamp(2rem, 1vw + 1.5rem, 3.75rem)" }}
       >
         0
       </h3>
 
-      <p className="text-[11px] sm:text-xs font-medium uppercase tracking-[0.25em] text-white/55 group-hover:text-white/90 transition-colors duration-500">
+      <p className="font-medium uppercase tracking-[0.25em] text-white/55 group-hover:text-white/90 transition-colors duration-500"
+        style={{ fontSize: "clamp(0.65rem, 0.2vw + 0.55rem, 0.75rem)" }}
+      >
         {item.title}
       </p>
 
@@ -151,7 +160,7 @@ const NumbersMain = () => {
   }, []);
 
   return (
-    <section className="relative bg-[#00173d] text-white py-24 px-6 sm:px-10 overflow-hidden">
+    <section className="relative bg-[#00173d] text-white py-24 px-6 sm:px-10 overflow-hidden" style={{ padding: "clamp(3rem, 5vw + 1rem, 6rem) clamp(1rem, 2vw + 0.5rem, 2.5rem)" }}>
       {/* soft background glow */}
       <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-blue-600/10 blur-3xl" />
 
@@ -159,11 +168,11 @@ const NumbersMain = () => {
         <div ref={headingRef} className="mb-14 flex flex-col items-start gap-3">
           <div className="flex items-center gap-3">
             <span className="h-[2px] w-10 bg-blue-500" />
-            <span className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-400">
+            <span className="font-semibold uppercase tracking-[0.3em] text-blue-400" style={{ fontSize: "clamp(0.6rem, 0.2vw + 0.5rem, 0.75rem)" }}>
               Our track record
             </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+          <h2 className="font-bold tracking-tight" style={{ fontSize: "clamp(1.5rem, 0.8vw + 1rem, 2.25rem)" }}>
             Numbers that speak for themselves
           </h2>
         </div>

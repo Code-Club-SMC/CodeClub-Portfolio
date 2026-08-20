@@ -397,7 +397,7 @@ export default function AboutUsSection() {
                       <FaGlobe className="text-white text-sm" />
                     </div>
                     <div>
-                      <div className="text-lg font-bold text-gray-900 leading-none">35+</div>
+                      <div className="text-lg font-bold text-gray-900 leading-none">75+</div>
                       <div className="text-[11px] text-gray-500 uppercase tracking-wide">
                         Clients Worldwide
                       </div>

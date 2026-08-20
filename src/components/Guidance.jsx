@@ -122,8 +122,8 @@ const Guidance = () => {
 
       // Add glow effect to the blue dot
       gsap.to(".blue-dot", {
-        scale: 1.5,
-        duration: 0.8,
+        scale: 1.3,
+        duration: 1.5,
         ease: "sine.inOut",
         yoyo: true,
         repeat: -1,

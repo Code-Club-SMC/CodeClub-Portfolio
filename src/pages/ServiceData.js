@@ -162,8 +162,10 @@ export const serviceMap = {
 
     team: [
       { name: "Abdullah", role: "Senior App Developer" },
+      {name : "Amaad Ur Rehman" , role: "Senior App Developer" },
       { name: "Affan", role: "Junior App Developer" },
       { name: "Sharif", role: "Junior App Developer" },
+      
 
     ],
   },
@@ -373,7 +375,7 @@ export const serviceMap = {
 
     team: [
       { name: "Abdullah Qureshi", role: "AI/ML Developer" },
-      { name: "Muhammad Mohaeed", role: "AI/ML Developer" },
+      { name: "Muhammad Mohid", role: "AI/ML Developer" },
     ],
   },
 
@@ -461,6 +463,7 @@ export const serviceMap = {
     ],
     team: [
       { name: "Shaheer Siddiqui", role: "Cybersecurity Specialist" },
+
     ],
   },
 
@@ -616,7 +619,7 @@ export const serviceMap = {
     ],
     team: [
       { name: "Abirullah", role: "IoT Developer" },
-      { name: "Muhammad Mohaeed", role: "IoT Developer" },
+      { name: "Muhammad Mohid", role: "IoT Developer" },
     ],
 
   },

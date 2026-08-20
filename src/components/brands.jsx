@@ -25,7 +25,6 @@ import FeatherStartCarWash from "../assets/brands/FeatherStartCarWash.jpeg";
 import LEOLearning from "../assets/brands/LEOLearning.jpeg";
 import CelesteinnHotel from "../assets/brands/CelesteinnHotel.jpeg";
 import GLEAMUkPremiumCarWash from "../assets/brands/GLEAMUkPremiumCarWash.png";
-import win from "../assets/brands/win.jpg";
 import GeoWash from "../assets/brands/GEOWash.jpeg";
 import edwardian from "../assets/about/edwardian.jpg";
 import genius from "../assets/misc/gca.jpg";
@@ -56,7 +55,6 @@ export const brands = [
   { name: "Rehmat Tax Pvt Ltd.", image: brand3 },
   { name: "Federal Youth Parliment", image: brand9 },
   { name: "Zamong Khyber Pvt Ltd.", image: brand4 },
-  { name: "Imsciences (cdc).", image: win },
   { name: "GEO-Wash.", image: GeoWash },
   { name: "Edwardian Coaching Academy.", image: edwardian },
   { name: "Genius Coaching Academy.", image: genius },
@@ -74,7 +72,7 @@ export const brands = [
   { name: "Concordia Colleges", image: ConcordiaColleges },
   { name: "Muftah Chemicals PVT LTD", image: MuftahChemicals },
   { name: "NIC Peshawar", image: NICPeshawar },
-  { name: "New Al-Kareem Hostal", image: NewAlKareemHostal },
+  { name: "New Al-Kareem Hostel", image: NewAlKareemHostal },
   { name: "Quality Coaching Academy", image: QualityCoachingAcademy },
   { name: "Sayaratak", image: Sayaratak },
   { name: "Naqaa-Ksa", image: NaqaaKsa },
@@ -119,10 +117,13 @@ const Brands = () => {
         loop={true}
         spaceBetween={30}
         breakpoints={{
-          320: { slidesPerView: 2 },
-          640: { slidesPerView: 3 },
-          768: { slidesPerView: 4 },
-          1024: { slidesPerView: 5 },
+          320: { slidesPerView: 2.2, spaceBetween: 12 },
+          400: { slidesPerView: 2.6, spaceBetween: 14 },
+          480: { slidesPerView: 2.8, spaceBetween: 16 },
+          540: { slidesPerView: 3, spaceBetween: 18 },
+          640: { slidesPerView: 3.2, spaceBetween: 20 },
+          768: { slidesPerView: 4, spaceBetween: 24 },
+          1024: { slidesPerView: 5, spaceBetween: 28 },
         }}
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
       >
@@ -136,11 +137,11 @@ const Brands = () => {
                 initial="hidden"
                 animate="visible"
                 transition={{ delay: index * 0.04, duration: 0.6 }}
-                className="flex flex-col justify-center items-center bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-5 sm:p-6"
+                className="flex flex-col justify-center items-center bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 p-3 sm:p-4 md:p-5 lg:p-6"
               >
                 {/* Logo container with fixed size */}
                 <div
-                  className={`h-28 w-40 flex justify-center items-center rounded-lg ${
+                  className={`h-24 w-32 sm:h-28 sm:w-40 flex justify-center items-center rounded-lg ${
                     isWhiteLogo ? "bg-gray-900 p-2" : "bg-white p-2"
                   }`}
                 >
@@ -152,7 +153,7 @@ const Brands = () => {
                 </div>
 
                 {/* Brand name */}
-                <p className="mt-4 sm:mt-5 text-sm sm:text-base font-bold text-gray-900 text-center">
+                <p className="mt-3 sm:mt-4 text-xs sm:text-sm md:text-base font-bold text-gray-900 text-center">
                   {brand.name}
                 </p>
               </motion.div>

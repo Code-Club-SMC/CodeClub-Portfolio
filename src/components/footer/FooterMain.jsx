@@ -158,13 +158,19 @@ const FooterMain = () => {
             </div>
 
             {/* Location */}
-            <div className="flex items-start gap-3">
-              <FaMagnifyingGlassLocation className="text-blue-600 text-xl mt-1" />
-              <p>
-                Liberty Mall Opp: Airport runway, University Rd, Tehkal,
-                Peshawar, 25000, Pakistan
-              </p>
-            </div>
+            
+            <a
+            href="https://www.google.com/maps/search/?api=1&query=Liberty+Mall+Opp+Airport+Runway+University+Rd+Tehkal+Peshawar+25000+Pakistan"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-start gap-3 group cursor-pointer"
+          >
+            <FaMagnifyingGlassLocation className="text-blue-600 text-xl mt-1 group-hover:text-blue-700 transition-colors" />
+            <p className="group-hover:text-blue-700 transition-colors">
+              Liberty Mall Opp: Airport runway, University Rd, Tehkal,
+              Peshawar, 25000, Pakistan
+            </p>
+          </a>
           </div>
         </div>
       </div>

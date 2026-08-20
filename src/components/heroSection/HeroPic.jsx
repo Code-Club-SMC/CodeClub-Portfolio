@@ -241,7 +241,7 @@ const HeroPic = () => {
           opacity: ready ? 1 : 0, 
           transition: "opacity 0.3s ease, height 0.2s ease" 
         }}>
-          <h1 className="lg:text-5xl md:text-5xl sm:text-3xl font-bold lg:leading-17 md:leading-13 sm:leading-10 w-full inline-block">
+          <h1 className="font-bold w-full inline-block">
             <div ref={(el) => (lineRefs.current[0] = el)} className="text-line">{splitText(lines[0])}</div>
             <div ref={(el) => (lineRefs.current[1] = el)} className="text-line">{splitText(lines[1])}</div>
             <div ref={(el) => (lineRefs.current[2] = el)} className="text-line">{splitText(lines[2])}</div>

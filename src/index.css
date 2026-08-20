@@ -55,6 +55,15 @@
       transform: translateY(0%);
     }
   }
+
+  @keyframes tech-scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
 }
 .swiper {
   width: 100%;
