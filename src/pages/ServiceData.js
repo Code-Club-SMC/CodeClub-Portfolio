@@ -161,7 +161,6 @@ export const serviceMap = {
     ],
 
     team: [
-      { name: "Amad ur Rehman", role: "Team Lead" },
       { name: "Abdullah", role: "Senior App Developer" },
       { name: "Affan", role: "Junior App Developer" },
       { name: "Sharif", role: "Junior App Developer" },
@@ -259,23 +258,30 @@ export const serviceMap = {
       {
         name: "Atif Muhammad",
         role: "Team lead",
-        LinkedIn: "https://www.linkedin.com/in/atif-muhammad-ba1396289/",
       },
-      
       {
-        name: " Muhammad Zaigham",
+        name: "Abdul-Rehman",
+        role: "Senior Full-stack Developer",
+      },
+      {
+        name: "Abirullah",
+        role: "Full-stack Developer",
+      },
+      {
+        name: "Muhammad Sannan Sherzada",
+        role: "MERN Stack Developer",
+      },
+      {
+        name: "Malaika",
         role: "Frontend Developer",
-        LinkedIn: "www.linkedin.com/in/muhammad-zaigham-960008260",
       },
       {
-        name: "Muzammil Shiraz",
-        role: "Full-stack Developer",
-        LinkedIn: "https://www.linkedin.com/in/muzammil-shiraz/",
+        name: "Muhammad Hisham",
+        role: "PERN Stack Developer",
       },
       {
-        name: "Abdur Rehman",
-        role: "Full-stack Developer",
-        LinkedIn: "https://www.linkedin.com/in/musa-bukhari/",
+        name: "Muhammad Waqas",
+        role: "MERN Stack Developer",
       },
     ],
   },
@@ -366,7 +372,8 @@ export const serviceMap = {
     ],
 
     team: [
-      { name: "Ihtisham Ul Haq", role: "Team Lead" },
+      { name: "Abdullah Qureshi", role: "AI/ML Developer" },
+      { name: "Muhammad Mohaeed", role: "AI/ML Developer" },
     ],
   },
 
@@ -452,7 +459,9 @@ export const serviceMap = {
         ],
       },
     ],
-    team: [],
+    team: [
+      { name: "Shaheer Siddiqui", role: "Cybersecurity Specialist" },
+    ],
   },
 
   "ui-ux": {
@@ -519,7 +528,10 @@ export const serviceMap = {
         ],
       },
     ],
-      team: [],
+    team: [
+      { name: "Muhammad Affan", role: "UI/UX Designer" },
+      { name: "Fatima", role: "UI/UX Designer" },
+    ],
 
   },
   iot: {
@@ -602,7 +614,10 @@ export const serviceMap = {
         ],
       },
     ],
-      team: [],
+    team: [
+      { name: "Abirullah", role: "IoT Developer" },
+      { name: "Muhammad Mohaeed", role: "IoT Developer" },
+    ],
 
   },
 };
