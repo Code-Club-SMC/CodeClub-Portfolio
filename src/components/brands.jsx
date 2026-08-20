@@ -35,6 +35,13 @@ import lavita from "../assets/brands/lavita.jpg";
 import pyramids from "../assets/misc/pyramids.jpg";
 import psx from "../assets/misc/pakistan-stock.jpg";
 import edge from "../assets/brands/edge.jpg";
+import ConcordiaColleges from "../assets/brands/Concordia Colleges.jpeg";
+import MuftahChemicals from "../assets/brands/Muftah Chemicals PVT LTD.jpeg";
+import NICPeshawar from "../assets/brands/NIC Peshawar.jpeg";
+import NewAlKareemHostal from "../assets/brands/New Al-Kareem Hostal.jpeg";
+import QualityCoachingAcademy from "../assets/brands/Quality Coaching Academy.jpeg";
+import Sayaratak from "../assets/brands/Sayaratak.jpeg";
+import NaqaaKsa from "../assets/brands/UnKnown.jpeg";
 
 // Brand data
 export const brands = [
@@ -64,6 +71,13 @@ export const brands = [
   { name: "LEO Learning", image: LEOLearning },
   { name: "Celesteinn Hotel", image: CelesteinnHotel },
   { name: "GLEAM Uk Premium Car Wash", image: GLEAMUkPremiumCarWash },
+  { name: "Concordia Colleges", image: ConcordiaColleges },
+  { name: "Muftah Chemicals PVT LTD", image: MuftahChemicals },
+  { name: "NIC Peshawar", image: NICPeshawar },
+  { name: "New Al-Kareem Hostal", image: NewAlKareemHostal },
+  { name: "Quality Coaching Academy", image: QualityCoachingAcademy },
+  { name: "Sayaratak", image: Sayaratak },
+  { name: "Naqaa-Ksa", image: NaqaaKsa },
 
 ];
 
