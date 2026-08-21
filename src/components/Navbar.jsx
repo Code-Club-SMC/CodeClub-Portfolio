@@ -14,12 +14,13 @@ import {
   FaUsers,
   FaBriefcase,
   FaBuilding,
+  FaFighterJet,
 } from "react-icons/fa";
 import { HiMenu, HiX } from "react-icons/hi";
 import { MdArrowDropDown } from "react-icons/md";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/logos/logo.png";
-
 
 const menuData = {
   "Our Expertise": [
@@ -133,6 +134,201 @@ const getPath = (item) => {
     default:
       return "#";
   }
+};
+
+// Animated Jet Button Component - Fixed size
+const AnimatedJetButton = ({ buttonClass, onMouseEnter, onMouseLeave }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <Link
+      to="/contact"
+      onMouseEnter={() => {
+        setIsHovered(true);
+        onMouseEnter();
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        onMouseLeave();
+      }}
+      className={`${buttonClass} relative overflow-hidden cursor-pointer px-8 py-4 text-sm hidden md:flex items-center justify-center transition-all duration-500 ${
+        isHovered ? "rounded-full" : "rounded-lg"
+      }`}
+      style={{ minWidth: "140px", minHeight: "56px" }} // Fixed size to prevent layout shift
+    >
+      {/* Gradient background transition */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isHovered ? 1 : 0 }}
+        transition={{ duration: 0.5 }}
+      />
+
+      {/* Sky/cloud background for jet animation */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-b from-sky-400 to-blue-600 opacity-0"
+        animate={{ opacity: isHovered ? 0.8 : 0 }}
+        transition={{ duration: 0.3 }}
+      />
+
+      {/* Stars background */}
+      {isHovered && (
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(10)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-0.5 h-0.5 bg-white rounded-full"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ 
+                opacity: [0, 1, 0],
+                scale: [0, 1, 0],
+              }}
+              transition={{
+                duration: 1 + Math.random(),
+                repeat: Infinity,
+                delay: Math.random() * 2,
+                ease: "easeInOut",
+              }}
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Speed lines */}
+      {isHovered && (
+        <>
+          {[...Array(3)].map((_, i) => (
+            <motion.div
+              key={`speed-${i}`}
+              className="absolute h-px bg-white/50"
+              initial={{ x: 0, opacity: 0 }}
+              animate={{ 
+                x: [-30, 130],
+                opacity: [0, 1, 0],
+              }}
+              transition={{
+                duration: 0.8,
+                repeat: Infinity,
+                delay: i * 0.2,
+                ease: "linear",
+              }}
+              style={{
+                top: `${30 + i * 15}%`,
+                width: '25px',
+              }}
+            />
+          ))}
+        </>
+      )}
+
+      {/* Original text */}
+      <AnimatePresence mode="wait">
+        {!isHovered ? (
+          <motion.span
+            key="text"
+            className="relative z-10 inline-block whitespace-nowrap"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ 
+              opacity: 0, 
+              y: -20,
+              x: 15,
+              transition: { duration: 0.3, ease: "backIn" }
+            }}
+          >
+            Send request
+          </motion.span>
+        ) : (
+          <motion.span
+            key="jet"
+            className="relative z-10 inline-block"
+            initial={{ opacity: 0, x: 40, rotate: -30 }}
+            animate={{ 
+              opacity: 1, 
+              x: 0, 
+              rotate: 0,
+              transition: {
+                type: "spring",
+                stiffness: 200,
+                damping: 15,
+              }
+            }}
+            exit={{ 
+              opacity: 0, 
+              x: -40,
+              rotate: 30,
+              transition: { duration: 0.3 }
+            }}
+          >
+            <motion.div
+              animate={{
+                x: [0, 5, 0],
+                y: [0, -3, 0],
+                rotate: [0, -3, 0],
+              }}
+              transition={{
+                duration: 1.2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="relative"
+            >
+              <FaFighterJet className="text-white text-xl" />
+              
+              {/* Jet trail */}
+              <motion.div
+                className="absolute -left-8 top-1/2 w-8 h-0.5 bg-gradient-to-r from-transparent to-white"
+                animate={{
+                  opacity: [0, 1, 0],
+                  scaleX: [0, 1, 0],
+                }}
+                transition={{
+                  duration: 1.2,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                }}
+              />
+              
+              {/* Sparkles around jet */}
+              {[...Array(4)].map((_, i) => (
+                <motion.div
+                  key={`sparkle-${i}`}
+                  className="absolute w-0.5 h-0.5 bg-yellow-300 rounded-full"
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{
+                    opacity: [0, 1, 0],
+                    scale: [0, 1.5, 0],
+                    x: [0, (i % 2 === 0 ? 1 : -1) * 15],
+                    y: [0, (i % 3 === 0 ? 1 : -1) * 10],
+                  }}
+                  transition={{
+                    duration: 1,
+                    repeat: Infinity,
+                    delay: i * 0.15,
+                    ease: "easeOut",
+                  }}
+                />
+              ))}
+            </motion.div>
+          </motion.span>
+        )}
+      </AnimatePresence>
+
+      {/* Glow effect */}
+      {isHovered && (
+        <motion.div
+          className="absolute inset-0 bg-white"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 0.2, 0] }}
+          transition={{ duration: 1, repeat: Infinity }}
+        />
+      )}
+    </Link>
+  );
 };
 
 const Navbar = () => {
@@ -290,14 +486,11 @@ const Navbar = () => {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link
-            to="/contact"
+          <AnimatedJetButton 
+            buttonClass={buttonClass}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className={`${buttonClass} cursor-pointer px-8 py-4 text-sm hidden md:block`}
-          >
-            Send request
-          </Link>
+          />
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}

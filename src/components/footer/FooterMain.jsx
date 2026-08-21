@@ -4,9 +4,9 @@ import { FiMail, FiPhone } from "react-icons/fi";
 import { FaWhatsapp, FaMagnifyingGlassLocation } from "react-icons/fa6";
 import secp from "../../assets/logos/secp.jfif";
 
-const FooterMain = () => {
+const FooterMain = ({ className }) => {
   return (
-    <footer className="bg-white text-gray-500/80 pt-8 px-6 md:px-16 lg:px-24 xl:px-32 border-t border-gray-200">
+    <footer className={`${className || ""} bg-white text-gray-500/80 pt-8 px-6 md:px-16 lg:px-24 xl:px-32 border-t border-gray-200`}>
       <div className="flex flex-wrap justify-between gap-12 md:gap-6">
         {/* Left Section - Logo and Socials */}
         <div className="max-w-80">
@@ -19,7 +19,7 @@ const FooterMain = () => {
           <div className="flex items-center gap-3 mt-4 text-gray-700">
             {/* Instagram */}
             <a
-              href="https://www.instagram.com/codeclubb_?igsh=MWxpZjJ4OGFkNGN5YQ=="
+              href="https://www.instagram.com/codeclub.tech/?hl=en"
               target="_blank"
               rel="noopener noreferrer"
             >

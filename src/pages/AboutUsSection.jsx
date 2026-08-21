@@ -9,7 +9,7 @@ import {
   useSpring,
 } from "framer-motion";
 import { useEffect, useState } from "react";
-import teamImage from "../assets/about/aboutus2.jpg";
+import teamImage from "../assets/about/aboutus2.png";
 import UnlockComponent from "../components/UnlockComponent";
 import { FaRocket, FaGlobe, FaUsers, FaArrowRight, FaBullseye } from "react-icons/fa";
 
@@ -199,7 +199,7 @@ const StatCard = ({ icon: Icon, theme, ring, value, label }) => (
             <Icon className="text-white text-xl" />
           </div>
         </div>
-        <div className="text-4xl font-bold text-gray-900">
+        <div className="text-3xl sm:text-4xl font-bold text-gray-900">
           <CountUp value={value} />
         </div>
         <div className="text-sm mt-3 text-gray-600 uppercase tracking-widest">{label}</div>

@@ -41,11 +41,15 @@ import NewAlKareemHostal from "../assets/brands/New Al-Kareem Hostal.jpeg";
 import QualityCoachingAcademy from "../assets/brands/Quality Coaching Academy.jpeg";
 import Sayaratak from "../assets/brands/Sayaratak.jpeg";
 import NaqaaKsa from "../assets/brands/UnKnown.jpeg";
+import IMSciences from "../assets/brands/win.jpg";
+import AbbottabadClub  from "../assets/brands/AbbattabadClub.png";
 
 // Brand data
 export const brands = [
   { name: "Peshawar Services Club", image: brand10 },
   { name: "Haasil Pvt Ltd.", image: brand11 },
+  { name: "IMSciences", image: IMSciences },
+  { name: "Abbottabad Club", image: AbbottabadClub },
   { name: "Memaar Pvt Ltd.", image: brand1 },
   { name: "Shamroz group of companies Pvt Ltd.", image: brand5 },
   { name: "Paragon overseas education Pvt Ltd.", image: brand8 },
