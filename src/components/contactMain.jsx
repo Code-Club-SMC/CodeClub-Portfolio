@@ -1,6 +1,5 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import emailjs from "@emailjs/browser";
 import { FaArrowRight, FaCheckCircle, FaShieldAlt, FaFileContract, FaPaperPlane, FaRocket } from "react-icons/fa";
 
 const fadeUp = {
@@ -62,33 +61,30 @@ const ContactMain = () => {
     number: setNumber,
     company: setCompany,
   };
-fields
-  const form = useRef();
 
-  const sendEmail = (e) => {
+  const sendEmail = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    emailjs
-      .sendForm("service_eyo8hk4", "template_dfs32cr", form.current, {
-        publicKey: "QUXxa6No-djZfWLxa",
-      })
-      .then(
-        () => {
-          setLoading(false);
-          setName("");
-          setEmail("");
-          setMessage("");
-          setNumber("");
-          setCompany("");
-          setSuccess("Message sent successfully. We'll be in touch shortly.");
-        },
-        (err) => {
-          setLoading(false);
-          setError("Something went wrong. Please try again.");
-          console.log("FAILED...", err.text);
-        }
-      );
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, number, company, message }),
+      });
+      if (!res.ok) throw new Error("Request failed");
+      setName("");
+      setEmail("");
+      setMessage("");
+      setNumber("");
+      setCompany("");
+      setSuccess("Message sent successfully. We'll be in touch shortly.");
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+      console.log("FAILED...", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -193,7 +189,6 @@ fields
           <motion.form
             variants={staggerContainer}
             className="space-y-10"
-            ref={form}
             name="contact-form"
             onSubmit={sendEmail}
           >
