@@ -384,11 +384,11 @@ export default function Clients() {
               variants={fadeUp}
               className="text-6xl font-bold tracking-tight leading-[1.02] md:text-7xl lg:text-8xl"
             >
-              One client at a time,
+              Short Intro Of,
               <br />
               <span className="relative">
                 <span className="bg-gradient-to-r from-gray-400 to-gray-600 bg-clip-text text-transparent">
-                  one story at a time.
+                  Our Success Story
                 </span>
                 <motion.span
                   initial={{ scaleX: 0 }}
@@ -414,9 +414,8 @@ export default function Clients() {
             className="mt-16 flex flex-wrap gap-16"
           >
             {[
-              { value: clients.length, label: "Trusted Clients" },
-              { value: Object.keys(serviceMap).length, label: "Service Disciplines" },
-              { value: "Full-screen", label: "Client Focus" },
+              { value: "75+", label: "Trusted Clients" },
+              { value: "10+", label: "Service Disciplines" },
             ].map((stat, i) => (
               <motion.div key={i} variants={fadeUp}>
                 <motion.span
