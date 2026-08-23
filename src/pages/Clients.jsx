@@ -263,7 +263,7 @@ const clients = clientEntries.map((client, index) => ({
   id: `${client.name}-${index}`,
 }));
 
-const ClientSection = ({ client, index, total }) => {
+const ClientSection = ({ client, index }) => {
   const palette = getPalette(index);
   const hasImage = Boolean(client.image);
   const isDarkFrame = client.logoTone === "dark";
@@ -332,14 +332,6 @@ const ClientSection = ({ client, index, total }) => {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="max-w-2xl"
         >
-          <div className="mb-6 flex items-center gap-4">
-            <span className="text-xs uppercase tracking-[0.35em] text-gray-400">
-              {String(index + 1).padStart(2, "0")} /{" "}
-              {String(total).padStart(2, "0")}
-            </span>
-            <span className="h-px flex-1 bg-gray-200" />
-          </div>
-
           <span className="inline-flex rounded-full bg-gray-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-gray-500">
             {client.focus}
           </span>
@@ -350,10 +342,6 @@ const ClientSection = ({ client, index, total }) => {
 
           <p className="mt-6 text-lg leading-8 text-gray-600 md:text-xl">
             {client.description}
-          </p>
-
-          <p className="mt-8 text-sm font-medium uppercase tracking-[0.25em] text-gray-400">
-            Scroll down for the next client
           </p>
         </motion.div>
       </div>
@@ -462,7 +450,6 @@ export default function Clients() {
           key={client.id}
           client={client}
           index={index}
-          total={clients.length}
         />
       ))}
     </main>
