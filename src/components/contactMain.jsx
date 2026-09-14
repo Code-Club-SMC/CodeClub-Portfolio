@@ -67,18 +67,27 @@ const ContactMain = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE || "http://localhost:5000"}/api/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, number, company, message }),
+        body: JSON.stringify({
+          name,
+          email,
+          phone: number,
+          companyNo: company,
+          message,
+        }),
       });
-      if (!res.ok) throw new Error("Request failed");
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.message || "Request failed");
+      }
       setName("");
       setEmail("");
       setMessage("");
       setNumber("");
       setCompany("");
-      setSuccess("Message sent successfully. We'll be in touch shortly.");
+      setSuccess("Message sent successfully! Our team will get back to you shortly.");
     } catch (err) {
       setError("Something went wrong. Please try again.");
       console.log("FAILED...", err);

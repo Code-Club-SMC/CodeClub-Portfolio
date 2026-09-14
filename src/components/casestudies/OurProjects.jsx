@@ -1,119 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { FiExternalLink } from "react-icons/fi";
+import { HiOutlineCode } from "react-icons/hi";
+import caseStudiesData from "../../data/caseStudiesData.json";
 
-import web_project1 from "../../assets/portfolio/web_project1.png";
-import web_project2 from "../../assets/portfolio/web_project2.png";
-import web_project3 from "../../assets/portfolio/web_project3.png";
-import web_project4 from "../../assets/portfolio/web_project4.png";
-import web_project5 from "../../assets/portfolio/web_project5.png";
-import web_project6 from "../../assets/portfolio/web_project6.png";
-import web_project7 from "../../assets/portfolio/web-project7.png";
-import web_project8 from "../../assets/portfolio/web-project8.png";
-import hasil from "../../assets/portfolio/web-hassil.jpg";
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
 
-import ai_project from "../../assets/portfolio/ai_project.png";
-import app_project from "../../assets/portfolio/app_project.png";
-import app_project2 from "../../assets/portfolio/app_project2.png";
-import app_project3 from "../../assets/portfolio/app_project3.png";
-import cyber_project1 from "../../assets/portfolio/cyber_project1.png";
-import App5 from "../../assets/portfolio/App_project5.jpg";
-import App6 from "../../assets/portfolio/psc-app.jpeg";
-const projects = [
+const imageModules = import.meta.glob("../../assets/portfolio/*.{jpeg,jpg,png,webp}", {
+  eager: true,
+});
 
-   {
-    title: "Peshawar Services Club",
-   description:
-      "Complete solution with product management, orders, insights, and a sleek admin panel—fast and scalable.",
-   image: App6,
-   },
-  {
-    title: "SavSplit",
-    description:
-      "Dual-mode app for personal and business use. Personal: split bills, track expenses. Business: manage inventory, record sales—like QuickBooks & Splitwise in one.",
-    image: app_project,
-  },
+const getLocalImage = (filename) => {
+  const match = Object.entries(imageModules).find(([path]) =>
+    path.endsWith(`/${filename}`)
+  );
+  return match ? match[1].default : "";
+};
 
-   {
-   title: "Haasil - Multi vendor E-commerce Platform",
-   description:
-    "A comprehensive e-commerce platform supporting multiple vendors with features like product management, order tracking, and analytics.",
-   image: hasil,
-  },
-  {
-    title: "SEIZURE SENSE",
-    description:
-      "AN AI/ML-based system that analyzes brain signals (EEG DATA) to predict epileptic seizures in advance. It alerts the patient before an attack, allowing them to move to a safe environment and reduce the risk of injury.",
-    image: ai_project,
-  },
-  {
-    title: "NovaSuite – AI SaaS Platform for Creative & Diagnostic Tools",
-    description:
-      "A powerful AI SaaS platform offering image generation, blog suggestions, background removal, resume review, and disease diagnostics—streamlining work through smart automation.",
-    image: web_project1,
-  },
-
-
-  {
-    title: "Custom LMS for an Education Platform",
-    description:
-      "Supports live classes, quizzes, certification, and user dashboards for students, instructors, and admins. Built for scale.",
-    image: web_project3,
-  },
-  {
-    title: "Essence — Scalable E-commerce Platform",
-    description:
-      "A modern e-commerce app with smart search, secure checkout, and mobile-first design for smooth shopping across devices.",
-    image: web_project4,
-  },
-  {
-    title: "Shopify — Full-featured E-commerce & Admin Panel",
-    description:
-      "Complete solution with product management, orders, insights, and a sleek admin panel—fast and scalable.",
-    image: web_project5,
-  },
-  {
-    title: "Zmong Khyber Game Show",
-    description:
-      "Complete solution with product management, orders, insights, and a sleek admin panel—fast and scalable.",
-    image: web_project7,
-  },
-  {
-   title: "Federal Youth Parliament",
-  description:
-    "Complete solution with product management, orders, insights, and a sleek admin panel—fast and scalable.",
-   image: App5,
-   },
-  {
-    title: "VibeHive — Real-time Chat & Collaboration App",
-    description:
-      "Group chat, media sharing, presence indicators, and a clean UI. Built for seamless team and community communication.",
-    image: web_project6,
-  },
-  {
-    title: "Inventory Management System for a Multi location Retail Chain",
-    description:
-      "Tracks real-time stock, reduces overstocking, and streamlines supply operations. Includes barcode integration, role-based access, and reporting.",
-    image: web_project2,
-  },
-  {
-    title: "Halatick — Restaurant Ordering & Management App",
-    description:
-      "Order dine-in, takeaway, or delivery. Includes digital menus, live order tracking, and table reservations.",
-    image: app_project2,
-  },
-  {
-    title: "Khyber Pakhtunkhwa — Tourism Discovery App",
-    description:
-      "Guides, maps, offline support, and trip planning to explore KP’s historical, cultural, and natural treasures.",
-    image: app_project3,
-  },
-    {
-    title: "Smart Dual Finance",
-     description:
-       "Same as above, presented for another use case. Finance management across personal and business settings.",
-     image: cyber_project1,
-    },
-];
+const resolveImage = (item) => {
+  if (!item || !item.image) return "";
+  if (typeof item.image === "string" && item.image.startsWith("http")) return item.image;
+  if (typeof item.image === "string" && item.image.startsWith("/")) {
+    return `${API_BASE}${item.image}`;
+  }
+  return getLocalImage(item.image);
+};
 
 const getGradientColor = (index) => {
   const blue = "#2a7de3";
@@ -126,7 +37,61 @@ const getGradientColor = (index) => {
   return gradients[index % gradients.length];
 };
 
+const mapProject = (project, index) => ({
+  title: project.title || project.name || `Project ${index + 1}`,
+  description: project.description || "",
+  tags: Array.isArray(project.tags)
+    ? project.tags
+    : Array.isArray(project.technologiesUsed)
+      ? project.technologiesUsed
+      : [],
+  url: project.link || project.liveLink || project.demoUrl || project.url || "",
+  image: resolveImage(project),
+});
+
 const OurProjects = () => {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setLoading(true);
+        setError("");
+        const res = await fetch(`${API_BASE}/api/projects`);
+        if (!res.ok) throw new Error("Failed to fetch projects");
+        const data = await res.json();
+        const list = Array.isArray(data.projects) ? data.projects : [];
+        setProjects(list.map(mapProject));
+      } catch (err) {
+        console.error("Projects fetch error:", err);
+        setError("Unable to load projects right now. Showing cached content.");
+        setProjects(caseStudiesData.map(mapProject));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="text-center py-16">
+        <p className="text-gray-500 text-lg">Loading projects...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-4 mb-8">
+        <p className="text-red-500 text-sm">{error}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full px-4 space-y-10 relative z-10">
       {projects.map((project, index) => {
@@ -135,7 +100,7 @@ const OurProjects = () => {
 
         return (
           <motion.div
-            key={index}
+            key={project.title + index}
             initial={{
               background: `linear-gradient(to right, ${startColor}, ${endColor})`,
             }}
@@ -157,6 +122,38 @@ const OurProjects = () => {
               <div className="md:w-1/2 space-y-4">
                 <h3 className="text-3xl font-bold">{project.title}</h3>
                 <p className="text-base text-white/90">{project.description}</p>
+
+                {/* Tags */}
+                {project.tags && project.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[11px] font-medium tracking-wider uppercase px-3 py-1.5 rounded-full border border-white/20 text-white/80 bg-white/10"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* CTA */}
+                {project.url ? (
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2.5 self-start px-7 py-3 rounded-full text-sm font-semibold bg-white text-gray-900 shadow-lg hover:brightness-110 transition-all duration-300"
+                  >
+                    <FiExternalLink className="text-base" />
+                    View Live Project
+                  </a>
+                ) : (
+                  <span className="inline-flex items-center gap-2.5 self-start px-7 py-3 rounded-full text-sm font-semibold border border-white/20 text-white/70 bg-white/5">
+                    <HiOutlineCode className="text-base" />
+                    Private Deployment
+                  </span>
+                )}
               </div>
 
               {/* Image */}
