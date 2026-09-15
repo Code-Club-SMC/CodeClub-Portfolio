@@ -4,7 +4,7 @@ import { FaArrowRight, FaTimes, FaPaperPlane, FaBriefcase, FaMapPin, FaBuilding,
 import hero from "../assets/home/hero.jpg";
 import UnlockComponent from "../components/UnlockComponent";
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_BASE || "https://code-club-portfoliomanager-obqd.vercel.app";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },

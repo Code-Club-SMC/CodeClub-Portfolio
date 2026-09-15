@@ -13,7 +13,7 @@ const getImage = (filename) => {
   return match ? match[1].default : "";
 };
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_BASE || "https://code-club-portfoliomanager-obqd.vercel.app";
 
 const NewsPage = () => {
   const [news, setNews] = useState([]);

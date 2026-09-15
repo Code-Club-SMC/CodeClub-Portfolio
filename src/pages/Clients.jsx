@@ -78,7 +78,7 @@ const Clients = () => {
     try {
       setLoading(true);
       setError("");
-      const res = await fetch(`${import.meta.env.VITE_API_BASE || "http://localhost:5000"}/api/clients`);
+      const res = await fetch(`${import.meta.env.VITE_API_BASE || "https://code-club-portfoliomanager-obqd.vercel.app"}/api/clients`);
       if (!res.ok) throw new Error("Failed to fetch clients");
       const data = await res.json();
       const clientsList = Array.isArray(data.clients) ? data.clients : [];

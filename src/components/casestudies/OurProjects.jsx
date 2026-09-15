@@ -4,7 +4,7 @@ import { FiExternalLink } from "react-icons/fi";
 import { HiOutlineCode } from "react-icons/hi";
 import caseStudiesData from "../../data/caseStudiesData.json";
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_BASE || "https://code-club-portfoliomanager-obqd.vercel.app";
 
 const imageModules = import.meta.glob("../../assets/portfolio/*.{jpeg,jpg,png,webp}", {
   eager: true,

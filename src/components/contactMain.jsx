@@ -67,7 +67,7 @@ const ContactMain = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE || "http://localhost:5000"}/api/messages`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE || "https://code-club-portfoliomanager-obqd.vercel.app"}/api/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
