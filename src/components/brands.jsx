@@ -2,8 +2,9 @@ import React from "react";
 
 // Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
+import "swiper/css/pagination";
 
 
 import { motion } from "framer-motion";
@@ -112,24 +113,31 @@ const Brands = () => {
 
       {/* Carousel */}
       <Swiper
-        modules={[Autoplay]}
+        modules={[Autoplay, Pagination]}
         autoplay={{
           delay: 2000, // better than 0
           disableOnInteraction: false,
+          pauseOnMouseEnter: true,
         }}
         speed={4000}
         loop={true}
-        spaceBetween={30}
-        breakpoints={{
-          320: { slidesPerView: 2.2, spaceBetween: 12 },
-          400: { slidesPerView: 2.6, spaceBetween: 14 },
-          480: { slidesPerView: 2.8, spaceBetween: 16 },
-          540: { slidesPerView: 3, spaceBetween: 18 },
-          640: { slidesPerView: 3.2, spaceBetween: 20 },
-          768: { slidesPerView: 4, spaceBetween: 24 },
-          1024: { slidesPerView: 5, spaceBetween: 28 },
+        spaceBetween={24}
+        slidesPerView={6}
+        pagination={{
+          clickable: true,
+          bulletClass: 'swiper-pagination-bullet !bg-gray-400 opacity-60',
+          bulletActiveClass: 'swiper-pagination-bullet-active !bg-teal-600 opacity-100',
         }}
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        breakpoints={{
+          320: { slidesPerView: 2, spaceBetween: 12 },
+          400: { slidesPerView: 2, spaceBetween: 14 },
+          480: { slidesPerView: 2, spaceBetween: 16 },
+          540: { slidesPerView: 3, spaceBetween: 18 },
+          640: { slidesPerView: 3, spaceBetween: 20 },
+          768: { slidesPerView: 4, spaceBetween: 24 },
+          1024: { slidesPerView: 6, spaceBetween: 24 },
+        }}
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 !pb-12"
       >
         {brands.map((brand, index) => {
           const isWhiteLogo = brand.name === "H-MAK Pvt Ltd.";
