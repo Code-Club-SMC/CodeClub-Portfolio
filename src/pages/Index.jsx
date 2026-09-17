@@ -10,6 +10,7 @@ import ServicesMain from "../components/ServicesMain";
 import ContactMain from "../components/contactMain";
 import UnlockComponent from "../components/UnlockComponent";
 import Brands from "../components/brands";
+import TestimonialsMain from "../components/TestimonialsMain";
 
 
 const Index = () => {
@@ -23,6 +24,7 @@ const Index = () => {
       <NumbersMain></NumbersMain>
       <ServicesMain></ServicesMain>
       <Brands></Brands>
+      <TestimonialsMain></TestimonialsMain>
       <UnlockComponent></UnlockComponent>
     </div>
   );
