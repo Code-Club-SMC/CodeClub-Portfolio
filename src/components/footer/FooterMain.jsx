@@ -81,7 +81,7 @@ const FooterMain = ({ className }) => {
               { name: "Web Development", path: "/service/web-development" },
               { name: "App Development", path: "/service/mobile-apps" },
               { name: "UI/UX Design", path: "/service/ui-ux" },
-              { name: "Cyber Security", path: "/service/cyber-security" },
+              { name: "Cyber Security", path: "/service/cybersecurity" },
               { name: "Artificial Intelligence", path: "/service/ai-ml" },
               { name: "Internet Of Things (IoT)", path: "/service/iot" },
             ].map((item) => (
