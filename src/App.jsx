@@ -5,6 +5,7 @@ import Index from "./pages/Index";
 import OurTeam from "./pages/OurTeam";
 import OurVision from "./pages/OurVision";
 import CareerPage from "./pages/Careers";
+import JobDetails from "./pages/JobDetails";
 import FooterMain from "./components/footer/FooterMain";
 import Navbar from "./components/Navbar";
 import CaseStudies from "./pages/CaseStudies";
@@ -47,6 +48,8 @@ function AppInner() {
           <Route path="/our-team" element={<OurTeam />} />
           <Route path="/vision" element={<OurVision />} />
           <Route path="/careers" element={<CareerPage />} />
+          <Route path="/careers/:id" element={<JobDetails />} />
+          <Route path="/job/:id" element={<JobDetails />} />
           <Route path="/caseStudies" element={<Portfolio />} />
           <Route path="/clients" element={<Clients />} />
           <Route path="/methodology" element={<OurMethodology />} />
