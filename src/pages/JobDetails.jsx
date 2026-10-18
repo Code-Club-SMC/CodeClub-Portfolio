@@ -623,7 +623,7 @@ export default function JobDetails() {
                   <div>
                     <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 mb-2">
                       <FaLinkedin className="text-gray-400 text-xs" />
-                      LinkedIn Profile <span className="text-gray-400 font-normal">(optional)</span>
+                      LinkedIn Profile <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="url"
