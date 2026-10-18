@@ -16,14 +16,7 @@ import {
   FaFilePdf,
   FaPaperPlane,
   FaCheckCircle,
-  FaShareAlt,
-  FaCheck,
-  FaRegCopy,
-  FaRegQuestionCircle,
-  FaClock,
-  FaGraduationCap,
-  FaShieldAlt,
-  FaRocket,
+  FaExclamationCircle,
 } from "react-icons/fa";
 import hero from "../assets/home/hero.jpg";
 import UnlockComponent from "../components/UnlockComponent";
@@ -53,10 +46,10 @@ export default function JobDetails() {
     coverLetter: "",
   });
   const [resumeFile, setResumeFile] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
   const [applyLoading, setApplyLoading] = useState(false);
   const [applyError, setApplyError] = useState("");
   const [applySuccess, setApplySuccess] = useState("");
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     fetchJobDetails();
@@ -69,7 +62,7 @@ export default function JobDetails() {
       }
       setError("");
 
-      // 1. Fetch from /api/jobs first (bulletproof, avoids server 500 CastError)
+      // Fetch from /api/jobs first (safest, reliable)
       const listRes = await fetch(`${API_BASE}/api/jobs`);
       if (listRes.ok) {
         const listData = await listRes.json();
@@ -84,7 +77,7 @@ export default function JobDetails() {
         }
       }
 
-      // 2. Fallback to /api/jobs/:id only if id is a valid 24-character ObjectId
+      // Fallback to /api/jobs/:id only if id is a 24-character ObjectId
       const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(id);
       if (isValidObjectId) {
         const res = await fetch(`${API_BASE}/api/jobs/${id}`);
@@ -112,19 +105,86 @@ export default function JobDetails() {
   };
 
   const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleResumeChange = (e) => {
     const file = e.target.files?.[0];
-    setResumeFile(file || null);
+    if (file) {
+      if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+        setFieldErrors((prev) => ({
+          ...prev,
+          resume: "Only PDF format files are accepted.",
+        }));
+        setResumeFile(null);
+        return;
+      }
+      setResumeFile(file);
+      if (fieldErrors.resume) {
+        setFieldErrors((prev) => ({ ...prev, resume: "" }));
+      }
+    } else {
+      setResumeFile(null);
+    }
+  };
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.name.trim()) {
+      errors.name = "Full name is required";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim()) {
+      errors.email = "Email address is required";
+    } else if (!emailRegex.test(formData.email.trim())) {
+      errors.email = "Please enter a valid email address";
+    }
+
+    if (!formData.phone.trim()) {
+      errors.phone = "Phone number is required";
+    }
+
+    // Resume is mandatory
+    if (!resumeFile) {
+      errors.resume = "Please upload your Resume / CV in PDF format";
+    }
+
+    if (!formData.coverLetter.trim()) {
+      errors.coverLetter = "Cover letter is required";
+    }
+
+    // LinkedIn is optional, but if entered it must be a valid URL
+    if (formData.linkedin.trim()) {
+      const urlPattern = /^(https?:\/\/)?([a-z0-9]+\.)?linkedin\.com\/in\/[a-zA-Z0-9_\-./]+$/i;
+      if (!urlPattern.test(formData.linkedin.trim())) {
+        errors.linkedin = "Please enter a valid LinkedIn URL (e.g. https://linkedin.com/in/username)";
+      }
+    }
+
+    return errors;
   };
 
   const handleApply = async (e) => {
     e.preventDefault();
-    setApplyLoading(true);
     setApplyError("");
     setApplySuccess("");
+
+    // Validate must-have fields
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setApplyError("Please fill in all required fields marked with * correctly.");
+      return;
+    }
+    setFieldErrors({});
+
+    setApplyLoading(true);
 
     const jobId = job?.id || job?._id || id;
 
@@ -134,18 +194,13 @@ export default function JobDetails() {
       payload.append("name", formData.name.trim());
       payload.append("email", formData.email.trim());
       payload.append("phone", formData.phone.trim());
-      payload.append("linkedin", formData.linkedin.trim() || "");
-      payload.append("cover_letter", formData.coverLetter.trim());
+      
+      // If LinkedIn is empty (optional), supply the fallback placeholder required by the backend regex
+      const linkedinValue = formData.linkedin.trim() || "https://linkedin.com/in/not-provided";
+      payload.append("linkedin", linkedinValue);
 
-      // Ensure a valid resume PDF file is attached so the backend multer handler succeeds
-      let fileToSend = resumeFile;
-      if (!fileToSend) {
-        const fallbackPdf = `%PDF-1.4\n1 0 obj\n<< /Title (Resume - ${formData.name}) >>\nendobj\ntrailer\n<<>>\n%%EOF`;
-        fileToSend = new File([fallbackPdf], `${formData.name.replace(/\s+/g, "_")}_resume.pdf`, {
-          type: "application/pdf",
-        });
-      }
-      payload.append("resume", fileToSend);
+      payload.append("cover_letter", formData.coverLetter.trim());
+      payload.append("resume", resumeFile);
 
       const res = await fetch(`${API_BASE}/api/applications`, {
         method: "POST",
@@ -158,9 +213,11 @@ export default function JobDetails() {
         throw new Error(data.message || "Failed to submit application. Please check your details and try again.");
       }
 
-      setApplySuccess("Application submitted successfully! Your application has been received by Code Club.");
+      setApplySuccess("Application submitted successfully! We have received your application.");
       setFormData({ name: "", email: "", phone: "", linkedin: "", coverLetter: "" });
       setResumeFile(null);
+      const fileInput = document.getElementById("resume-input");
+      if (fileInput) fileInput.value = "";
     } catch (err) {
       setApplyError(err.message || "An unexpected error occurred while submitting. Please try again.");
     } finally {
@@ -168,90 +225,11 @@ export default function JobDetails() {
     }
   };
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
-  };
-
-  const scrollToApply = (e) => {
-    e.preventDefault();
-    const applyElement = document.getElementById("apply-section");
-    if (applyElement) {
-      applyElement.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  // Helper to format structured text (bullet points and headings)
-  const renderFormattedText = (text) => {
-    if (!text) return null;
-    const lines = text.split("\n");
-    const elements = [];
-    let currentList = [];
-
-    const flushList = (keyPrefix) => {
-      if (currentList.length > 0) {
-        elements.push(
-          <ul key={`${keyPrefix}-list`} className="space-y-2.5 my-3">
-            {currentList.map((item, idx) => (
-              <li key={idx} className="flex items-start gap-3 text-gray-700 text-sm md:text-base leading-relaxed">
-                <FaCheckCircle className="text-blue-600 mt-1 flex-shrink-0 text-sm" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        );
-        currentList = [];
-      }
-    };
-
-    lines.forEach((line, index) => {
-      const trimmed = line.trim();
-      if (!trimmed) {
-        flushList(`empty-${index}`);
-        return;
-      }
-
-      if (trimmed.startsWith("- ") || trimmed.startsWith("• ") || trimmed.startsWith("* ")) {
-        currentList.push(trimmed.substring(2));
-      } else if (
-        trimmed.endsWith(":") ||
-        trimmed.toLowerCase().includes("responsibilities") ||
-        trimmed.toLowerCase().includes("requirements") ||
-        trimmed.toLowerCase().includes("work arrangement") ||
-        trimmed.toLowerCase().includes("experience:")
-      ) {
-        flushList(`heading-${index}`);
-        elements.push(
-          <h4 key={`heading-${index}`} className="text-base md:text-lg font-bold text-gray-900 mt-6 mb-3 flex items-center gap-2">
-            <span className="w-1.5 h-4 bg-blue-600 rounded-full" />
-            {trimmed}
-          </h4>
-        );
-      } else {
-        flushList(`p-${index}`);
-        elements.push(
-          <p key={`p-${index}`} className="text-gray-600 text-sm md:text-base leading-relaxed mb-3">
-            {trimmed}
-          </p>
-        );
-      }
-    });
-
-    flushList("final");
-    return elements;
-  };
-
   if (loading && !job) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-950 text-white pt-24">
+      <div className="min-h-screen flex items-center justify-center bg-white text-gray-900 pt-24">
         <div className="text-center">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-12 h-12 border-3 border-blue-500/30 border-t-blue-500 rounded-full mx-auto mb-4"
-          />
-          <p className="text-gray-400 text-sm font-medium tracking-wide">Loading position details...</p>
+          <p className="text-gray-500 text-lg">Loading job details...</p>
         </div>
       </div>
     );
@@ -259,25 +237,21 @@ export default function JobDetails() {
 
   if (error && !job) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-950 px-4 pt-24">
-        <div className="max-w-md w-full bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center shadow-xl">
-          <div className="w-14 h-14 bg-red-500/10 border border-red-500/20 text-red-400 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
-            !
-          </div>
-          <h2 className="text-xl font-bold text-white mb-2">Position Not Found</h2>
-          <p className="text-gray-400 mb-6 text-sm leading-relaxed">{error}</p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-white px-4 pt-24">
+        <div className="max-w-md w-full bg-white border border-gray-200 rounded-xl p-8 text-center shadow-sm">
+          <p className="text-red-500 text-lg mb-4">{error}</p>
+          <div className="flex gap-3 justify-center">
             <button
               onClick={fetchJobDetails}
-              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-medium transition-colors"
+              className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium"
             >
               Retry
             </button>
             <Link
               to="/careers"
-              className="px-5 py-2.5 border border-gray-700 text-gray-300 hover:text-white hover:bg-gray-800 rounded-xl text-sm font-medium transition-colors"
+              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
             >
-              View All Positions
+              All Openings
             </Link>
           </div>
         </div>
@@ -295,548 +269,381 @@ export default function JobDetails() {
     : Array.isArray(job?.skills) ? job.skills : [];
 
   return (
-    <div className="min-h-screen bg-[#fafbfc] text-gray-900">
-      {/* Premium Dark Tech Hero Header */}
-      <section className="relative w-full bg-[#001c3d] text-white pt-28 pb-20 overflow-hidden">
-        {/* Ambient Glows */}
-        <div
-          className="absolute -top-32 -right-32 w-96 h-96 rounded-full opacity-30 blur-3xl pointer-events-none"
-          style={{ background: "radial-gradient(circle, #3b82f6, #8b5cf6, transparent)" }}
+    <>
+      {/* Standard Hero Section matching Careers.jsx and other pages */}
+      <section className="relative w-full h-[60vh] md:h-[65vh] overflow-hidden">
+        <motion.img
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          src={hero}
+          alt="Careers at CodeClub"
+          className="absolute inset-0 w-full h-full object-cover"
         />
-        <div
-          className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full opacity-25 blur-3xl pointer-events-none"
-          style={{ background: "radial-gradient(circle, #06b6d4, #3b82f6, transparent)" }}
-        />
+        <div className="absolute inset-0 bg-black/70" />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12">
-          {/* Breadcrumbs */}
-          <div className="flex items-center gap-2 text-xs md:text-sm text-gray-400 mb-8">
+        <div className="relative z-10 flex flex-col justify-center items-center h-full px-6 text-center text-white max-w-4xl mx-auto pt-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="mb-4"
+          >
             <Link
               to="/careers"
-              className="inline-flex items-center gap-2 text-gray-300 hover:text-white transition-colors"
+              className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold uppercase tracking-[0.25em] text-gray-300 hover:text-white transition-colors"
             >
-              <FaArrowLeft className="text-xs" />
-              Careers
+              <FaArrowLeft className="text-xs" /> Back to Careers
             </Link>
-            <span className="text-gray-600">/</span>
-            <span className="text-blue-400 truncate max-w-md">{job?.title}</span>
-          </div>
+          </motion.div>
 
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-            <div className="space-y-4 max-w-3xl">
-              {/* Badges Bar */}
-              <div className="flex flex-wrap items-center gap-2.5">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                  <FaBuilding className="text-[11px]" />
-                  {company}
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/10 text-gray-200 border border-white/15">
-                  <FaBriefcase className="text-[11px]" />
-                  {jobType}
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/10 text-gray-200 border border-white/15">
-                  <FaMapPin className="text-[11px]" />
-                  {locationText}
-                </span>
-                {salaryText && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                    <FaMoneyBillWave className="text-[11px]" />
-                    {salaryText}
-                  </span>
-                )}
-              </div>
+          <motion.h1
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4"
+          >
+            {job?.title}
+          </motion.h1>
 
-              {/* Title */}
-              <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight">
-                {job?.title}
-              </h1>
-
-              {/* Metadata Highlights */}
-              <div className="flex flex-wrap items-center gap-6 text-xs md:text-sm text-gray-300 pt-1">
-                <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Actively Recruiting
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-300"
+          >
+            <span className="flex items-center gap-1.5">
+              <FaBuilding className="text-xs text-gray-400" />
+              {company}
+            </span>
+            <span>•</span>
+            <span className="flex items-center gap-1.5">
+              <FaBriefcase className="text-xs text-gray-400" />
+              {jobType}
+            </span>
+            <span>•</span>
+            <span className="flex items-center gap-1.5">
+              <FaMapPin className="text-xs text-gray-400" />
+              {locationText}
+            </span>
+            {salaryText && (
+              <>
+                <span>•</span>
+                <span className="flex items-center gap-1.5 text-gray-200">
+                  <FaMoneyBillWave className="text-xs text-green-400" />
+                  {salaryText}
                 </span>
-                {deadlineDate && (
-                  <span className="flex items-center gap-2">
-                    <FaCalendarAlt className="text-gray-400" />
-                    Deadline:{" "}
-                    {new Date(deadlineDate).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-3 lg:flex-col lg:items-end">
-              <button
-                onClick={scrollToApply}
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-lg shadow-blue-600/30 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all text-sm cursor-pointer min-w-[170px]"
-              >
-                Apply for this Role
-                <FaArrowRight className="text-xs" />
-              </button>
-              <button
-                onClick={handleCopyLink}
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-gray-200 font-medium border border-white/10 transition-all text-sm cursor-pointer min-w-[170px]"
-              >
-                {copied ? (
-                  <>
-                    <FaCheck className="text-emerald-400 text-xs" />
-                    Link Copied!
-                  </>
-                ) : (
-                  <>
-                    <FaShareAlt className="text-xs text-gray-400" />
-                    Share Position
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
+              </>
+            )}
+            {deadlineDate && (
+              <>
+                <span>•</span>
+                <span className="flex items-center gap-1.5">
+                  <FaCalendarAlt className="text-xs text-gray-400" />
+                  Apply by: {new Date(deadlineDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                </span>
+              </>
+            )}
+          </motion.div>
         </div>
       </section>
 
-      {/* Main Content Layout */}
-      <section className="max-w-6xl mx-auto px-6 md:px-12 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          {/* Left Column: Job Description, Requirements, Skills, Form */}
-          <div className="lg:col-span-8 space-y-10">
-            {/* Description & Overview */}
-            <motion.div
-              initial="hidden"
-              whileInView="show"
-              viewport={viewportOnce}
-              variants={fadeUp}
-              className="bg-white rounded-3xl border border-gray-100 p-8 md:p-10 shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
-                <span className="w-2.5 h-6 bg-blue-600 rounded-full" />
-                <h2 className="text-xl md:text-2xl font-bold text-gray-900">Job Description</h2>
-              </div>
+      {/* Main Content matching Careers / About Us / Service pages */}
+      <div className="bg-white text-gray-900 min-h-screen pb-20">
+        <section className="px-6 md:px-24 py-16 max-w-5xl mx-auto">
+          {/* Job Details Card */}
+          <motion.div
+            initial="hidden"
+            whileInView="show"
+            viewport={viewportOnce}
+            variants={fadeUp}
+            className="bg-white border border-gray-200 rounded-xl p-6 md:p-10 mb-12"
+          >
+            <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+              <span className="h-px w-10 bg-gray-300" />
+              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-gray-500">
+                Job Details
+              </span>
+              <span className="h-px w-10 bg-gray-300" />
+            </div>
 
+            {/* Description */}
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-3">About the Role</h3>
               {job?.description ? (
-                <div className="prose prose-gray max-w-none text-gray-700 leading-relaxed">
-                  {renderFormattedText(job.description)}
-                </div>
+                <p className="text-gray-600 leading-relaxed whitespace-pre-line text-base">
+                  {job.description}
+                </p>
               ) : (
-                <p className="text-gray-500 italic">No detailed description provided for this position.</p>
+                <p className="text-gray-500 italic">No description provided.</p>
               )}
-            </motion.div>
+            </div>
 
-            {/* Requirements Section (if separate) */}
+            {/* Requirements */}
             {job?.requirements && (
-              <motion.div
-                initial="hidden"
-                whileInView="show"
-                viewport={viewportOnce}
-                variants={fadeUp}
-                className="bg-white rounded-3xl border border-gray-100 p-8 md:p-10 shadow-sm hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
-                  <span className="w-2.5 h-6 bg-purple-600 rounded-full" />
-                  <h2 className="text-xl md:text-2xl font-bold text-gray-900">Requirements & Qualifications</h2>
-                </div>
-
-                <div className="prose prose-gray max-w-none text-gray-700 leading-relaxed">
-                  {renderFormattedText(job.requirements)}
-                </div>
-              </motion.div>
+              <div className="mb-8 pt-6 border-t border-gray-100">
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Requirements & Qualifications</h3>
+                <p className="text-gray-600 leading-relaxed whitespace-pre-line text-base">
+                  {job.requirements}
+                </p>
+              </div>
             )}
 
-            {/* Skills & Technologies */}
+            {/* Skills */}
             {skillsList.length > 0 && (
-              <motion.div
-                initial="hidden"
-                whileInView="show"
-                viewport={viewportOnce}
-                variants={fadeUp}
-                className="bg-white rounded-3xl border border-gray-100 p-8 md:p-10 shadow-sm"
-              >
-                <div className="flex items-center gap-3 mb-5 pb-3 border-b border-gray-100">
-                  <span className="w-2.5 h-6 bg-cyan-500 rounded-full" />
-                  <h2 className="text-xl md:text-2xl font-bold text-gray-900">Required Skills & Tools</h2>
-                </div>
-
-                <div className="flex flex-wrap gap-2.5 pt-2">
+              <div className="pt-6 border-t border-gray-100">
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Skills & Tools</h3>
+                <div className="flex flex-wrap gap-2">
                   {skillsList.map((skill, idx) => (
                     <span
                       key={idx}
-                      className="px-4 py-2 rounded-xl text-xs md:text-sm font-semibold bg-gray-50 text-gray-800 border border-gray-200/80 hover:border-blue-300 hover:bg-blue-50/50 hover:text-blue-700 transition-all duration-200"
+                      className="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200"
                     >
                       {skill}
                     </span>
                   ))}
                 </div>
+              </div>
+            )}
+          </motion.div>
+
+          {/* Application Form Card */}
+          <motion.div
+            initial="hidden"
+            whileInView="show"
+            viewport={viewportOnce}
+            variants={fadeUp}
+            className="bg-white border border-gray-200 rounded-xl p-6 md:p-10"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <span className="h-px w-10 bg-gray-300" />
+              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-gray-500">
+                Application
+              </span>
+              <span className="h-px w-10 bg-gray-300" />
+            </div>
+
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Apply for this position</h3>
+            <p className="text-gray-500 text-sm mb-6">
+              Please complete the required details below to submit your application.
+            </p>
+
+            {applySuccess && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-6 flex items-center gap-2.5 text-green-700 text-sm font-medium bg-green-50 border border-green-200 p-4 rounded-lg"
+              >
+                <FaCheckCircle className="text-green-600 text-base flex-shrink-0" />
+                <span>{applySuccess}</span>
               </motion.div>
             )}
 
-            {/* Why Join CodeClub Bento Card */}
-            <motion.div
-              initial="hidden"
-              whileInView="show"
-              viewport={viewportOnce}
-              variants={fadeUp}
-              className="bg-gradient-to-br from-gray-950 via-gray-900 to-[#001c3d] text-white rounded-3xl p-8 md:p-10 shadow-lg relative overflow-hidden"
-            >
-              <div
-                className="absolute -right-20 -bottom-20 w-64 h-64 rounded-full opacity-20 blur-3xl pointer-events-none"
-                style={{ background: "radial-gradient(circle, #3b82f6, transparent)" }}
-              />
+            {applyError && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-6 flex items-center gap-2.5 text-red-600 text-sm font-medium bg-red-50 border border-red-200 p-4 rounded-lg"
+              >
+                <FaExclamationCircle className="text-red-500 text-base flex-shrink-0" />
+                <span>{applyError}</span>
+              </motion.div>
+            )}
 
-              <div className="mb-6 relative z-10">
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-400">
-                  Culture & Growth
-                </span>
-                <h3 className="text-2xl font-bold mt-1 text-white">Why Join Code Club?</h3>
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-5 relative z-10">
-                {[
-                  {
-                    icon: <FaRocket className="text-blue-400 mt-1" />,
-                    title: "Real Client Impact",
-                    desc: "Ship production-grade web, mobile, AI, and cybersecurity projects used by international clients.",
-                  },
-                  {
-                    icon: <FaGraduationCap className="text-purple-400 mt-1" />,
-                    title: "Skill Acceleration",
-                    desc: "Work alongside senior engineers and gain hands-on exposure to cutting-edge technologies.",
-                  },
-                  {
-                    icon: <FaShieldAlt className="text-emerald-400 mt-1" />,
-                    title: "Open & Transparent",
-                    desc: "A merit-driven environment where your contributions and ideas directly steer our projects.",
-                  },
-                  {
-                    icon: <FaClock className="text-cyan-400 mt-1" />,
-                    title: "Flexible Work Culture",
-                    desc: "Balanced work environment with supportive peers, team events, and continuous encouragement.",
-                  },
-                ].map((item, idx) => (
-                  <div key={idx} className="flex gap-3 bg-white/5 border border-white/10 rounded-2xl p-4">
-                    <span className="text-lg flex-shrink-0">{item.icon}</span>
-                    <div>
-                      <h4 className="font-semibold text-white text-sm">{item.title}</h4>
-                      <p className="text-gray-300 text-xs mt-1 leading-relaxed">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Application Form */}
-            <motion.div
-              id="apply-section"
-              initial="hidden"
-              whileInView="show"
-              viewport={viewportOnce}
-              variants={fadeUp}
-              className="bg-white rounded-3xl border border-gray-100 p-8 md:p-10 shadow-md scroll-mt-28"
-            >
-              <div className="flex items-center gap-3 mb-2">
-                <span className="w-2.5 h-6 bg-blue-600 rounded-full" />
-                <h2 className="text-xl md:text-2xl font-bold text-gray-900">Apply for this Position</h2>
-              </div>
-              <p className="text-gray-500 text-sm mb-8">
-                Submit your details below to start the application process with Code Club.
-              </p>
-
-              {applySuccess && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-6 p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-start gap-3.5"
-                >
-                  <FaCheckCircle className="text-emerald-500 text-xl mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h5 className="font-bold text-sm">Application Sent!</h5>
-                    <p className="text-xs mt-1 leading-relaxed text-emerald-700">{applySuccess}</p>
-                  </div>
-                </motion.div>
-              )}
-
-              {applyError && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-6 p-4 rounded-2xl bg-red-50 border border-red-200 text-red-600 text-sm"
-                >
-                  {applyError}
-                </motion.div>
-              )}
-
-              <form onSubmit={handleApply} className="space-y-5">
-                <div className="grid md:grid-cols-2 gap-5">
-                  <div>
-                    <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 mb-2">
-                      <FaUser className="text-gray-400 text-xs" />
-                      Full Name <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="e.g. Ahmad Khan"
-                      className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all bg-gray-50/60 focus:bg-white"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 mb-2">
-                      <FaEnvelope className="text-gray-400 text-xs" />
-                      Email Address <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="e.g. ahmad@example.com"
-                      className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all bg-gray-50/60 focus:bg-white"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-5">
-                  <div>
-                    <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 mb-2">
-                      <FaPhone className="text-gray-400 text-xs" />
-                      Phone Number <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      placeholder="+92 300 1234567"
-                      className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all bg-gray-50/60 focus:bg-white"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 mb-2">
-                      <FaLinkedin className="text-gray-400 text-xs" />
-                      LinkedIn Profile <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="url"
-                      name="linkedin"
-                      value={formData.linkedin}
-                      onChange={handleChange}
-                      placeholder="https://linkedin.com/in/username"
-                      className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all bg-gray-50/60 focus:bg-white"
-                    />
-                  </div>
-                </div>
-
+            <form onSubmit={handleApply} noValidate className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-4">
+                {/* Full Name */}
                 <div>
-                  <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 mb-2">
-                    <FaFilePdf className="text-gray-400 text-xs" />
-                    Resume / CV <span className="text-gray-400 font-normal">(PDF format)</span>
+                  <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+                    <FaUser className="text-gray-400" />
+                    Full Name <span className="text-red-500">*</span>
                   </label>
-                  <div className="border border-dashed border-gray-300 rounded-2xl p-4 bg-gray-50/60 hover:bg-gray-50 transition-colors">
-                    <input
-                      type="file"
-                      accept="application/pdf"
-                      onChange={handleResumeChange}
-                      className="w-full text-sm text-gray-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gray-900 file:text-white hover:file:bg-gray-800 cursor-pointer"
-                    />
-                    {resumeFile && (
-                      <div className="mt-2 text-xs text-blue-700 font-medium flex items-center justify-between bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200">
-                        <span className="flex items-center gap-1.5">
-                          <FaFilePdf className="text-red-500" />
-                          {resumeFile.name} ({(resumeFile.size / 1024).toFixed(1)} KB)
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => setResumeFile(null)}
-                          className="text-gray-500 hover:text-red-500 text-xs"
-                        >
-                          ✕ Remove
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="flex items-center justify-between text-xs font-semibold text-gray-700 mb-2">
-                    <span>Cover Letter / Pitch <span className="text-red-500">*</span></span>
-                  </label>
-                  <textarea
-                    name="coverLetter"
-                    value={formData.coverLetter}
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
                     onChange={handleChange}
-                    placeholder="Tell us about yourself, your relevant skills, and why you are excited to join Code Club..."
-                    rows={5}
-                    className="w-full border border-gray-200 rounded-xl p-4 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all bg-gray-50/60 focus:bg-white resize-none"
-                    required
+                    placeholder="Your Name"
+                    className={`w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none transition-all ${
+                      fieldErrors.name
+                        ? "border-red-400 ring-1 ring-red-200 bg-red-50/20"
+                        : "border-gray-200 focus:border-gray-400 focus:ring-1 focus:ring-gray-200"
+                    }`}
                   />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={applyLoading}
-                  className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-60 disabled:cursor-not-allowed text-white py-4 px-6 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 text-sm md:text-base shadow-md shadow-blue-600/20 cursor-pointer"
-                >
-                  {applyLoading ? (
-                    <>
-                      <motion.span
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                        className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
-                      />
-                      Submitting Application...
-                    </>
-                  ) : (
-                    <>
-                      <FaPaperPlane className="text-sm" />
-                      Submit Application
-                    </>
+                  {fieldErrors.name && (
+                    <p className="mt-1 text-xs text-red-500 font-medium">{fieldErrors.name}</p>
                   )}
-                </button>
-              </form>
-            </motion.div>
-          </div>
-
-          {/* Right Column: Sticky Sidebar Overview */}
-          <div className="lg:col-span-4 space-y-6">
-            <motion.div
-              initial="hidden"
-              whileInView="show"
-              viewport={viewportOnce}
-              variants={fadeUp}
-              className="bg-white rounded-3xl border border-gray-100 p-6 md:p-8 shadow-sm lg:sticky lg:top-28 space-y-6"
-            >
-              <h3 className="text-lg font-bold text-gray-900 pb-3 border-b border-gray-100">
-                Position Summary
-              </h3>
-
-              <div className="space-y-4 text-sm">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
-                    <FaBuilding className="text-sm" />
-                  </div>
-                  <div>
-                    <span className="text-xs text-gray-400 block font-medium">Company</span>
-                    <span className="font-semibold text-gray-800">{company}</span>
-                  </div>
                 </div>
 
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0">
-                    <FaBriefcase className="text-sm" />
-                  </div>
-                  <div>
-                    <span className="text-xs text-gray-400 block font-medium">Job Type</span>
-                    <span className="font-semibold text-gray-800">{jobType}</span>
-                  </div>
+                {/* Email Address */}
+                <div>
+                  <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+                    <FaEnvelope className="text-gray-400" />
+                    Email Address <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="your@email.com"
+                    className={`w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none transition-all ${
+                      fieldErrors.email
+                        ? "border-red-400 ring-1 ring-red-200 bg-red-50/20"
+                        : "border-gray-200 focus:border-gray-400 focus:ring-1 focus:ring-gray-200"
+                    }`}
+                  />
+                  {fieldErrors.email && (
+                    <p className="mt-1 text-xs text-red-500 font-medium">{fieldErrors.email}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                {/* Phone Number */}
+                <div>
+                  <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+                    <FaPhone className="text-gray-400" />
+                    Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="+92 300 1234567"
+                    className={`w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none transition-all ${
+                      fieldErrors.phone
+                        ? "border-red-400 ring-1 ring-red-200 bg-red-50/20"
+                        : "border-gray-200 focus:border-gray-400 focus:ring-1 focus:ring-gray-200"
+                    }`}
+                  />
+                  {fieldErrors.phone && (
+                    <p className="mt-1 text-xs text-red-500 font-medium">{fieldErrors.phone}</p>
+                  )}
                 </div>
 
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
-                    <FaMapPin className="text-sm" />
-                  </div>
-                  <div>
-                    <span className="text-xs text-gray-400 block font-medium">Location</span>
-                    <span className="font-semibold text-gray-800">{locationText}</span>
-                  </div>
+                {/* LinkedIn Profile (Optional) */}
+                <div>
+                  <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+                    <FaLinkedin className="text-gray-400" />
+                    LinkedIn Profile <span className="text-gray-400 font-normal">(optional)</span>
+                  </label>
+                  <input
+                    type="url"
+                    name="linkedin"
+                    value={formData.linkedin}
+                    onChange={handleChange}
+                    placeholder="https://linkedin.com/in/username"
+                    className={`w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none transition-all ${
+                      fieldErrors.linkedin
+                        ? "border-red-400 ring-1 ring-red-200 bg-red-50/20"
+                        : "border-gray-200 focus:border-gray-400 focus:ring-1 focus:ring-gray-200"
+                    }`}
+                  />
+                  {fieldErrors.linkedin && (
+                    <p className="mt-1 text-xs text-red-500 font-medium">{fieldErrors.linkedin}</p>
+                  )}
                 </div>
+              </div>
 
-                {salaryText && (
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">
-                      <FaMoneyBillWave className="text-sm" />
-                    </div>
-                    <div>
-                      <span className="text-xs text-gray-400 block font-medium">Compensation</span>
-                      <span className="font-semibold text-gray-800">{salaryText}</span>
-                    </div>
-                  </div>
-                )}
-
-                {deadlineDate && (
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center flex-shrink-0">
-                      <FaCalendarAlt className="text-sm" />
-                    </div>
-                    <div>
-                      <span className="text-xs text-gray-400 block font-medium">Application Deadline</span>
-                      <span className="font-semibold text-gray-800">
-                        {new Date(deadlineDate).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        })}
+              {/* Resume / CV (Mandatory) */}
+              <div>
+                <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+                  <FaFilePdf className="text-gray-400" />
+                  Resume / CV <span className="text-red-500">*</span>
+                  <span className="text-gray-400 font-normal">(PDF format required)</span>
+                </label>
+                <div
+                  className={`border rounded-lg p-3.5 transition-all ${
+                    fieldErrors.resume
+                      ? "border-red-400 ring-1 ring-red-200 bg-red-50/20"
+                      : "border-gray-200 bg-gray-50/50"
+                  }`}
+                >
+                  <input
+                    id="resume-input"
+                    type="file"
+                    accept="application/pdf"
+                    onChange={handleResumeChange}
+                    className="w-full text-sm text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer"
+                  />
+                  {resumeFile && (
+                    <p className="mt-2 text-xs text-gray-700 flex items-center justify-between font-medium">
+                      <span className="flex items-center gap-1.5">
+                        <FaFilePdf className="text-red-500" />
+                        {resumeFile.name} ({(resumeFile.size / 1024).toFixed(1)} KB)
                       </span>
-                    </div>
-                  </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setResumeFile(null);
+                          const fileInput = document.getElementById("resume-input");
+                          if (fileInput) fileInput.value = "";
+                        }}
+                        className="text-red-500 hover:underline text-xs"
+                      >
+                        Remove
+                      </button>
+                    </p>
+                  )}
+                </div>
+                {fieldErrors.resume && (
+                  <p className="mt-1 text-xs text-red-500 font-medium">{fieldErrors.resume}</p>
                 )}
               </div>
 
-              <div className="pt-2">
-                <button
-                  onClick={scrollToApply}
-                  className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-md shadow-blue-600/20 cursor-pointer"
-                >
-                  Apply Now
-                  <FaArrowRight className="text-xs" />
-                </button>
+              {/* Cover Letter */}
+              <div>
+                <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+                  Cover Letter <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  name="coverLetter"
+                  value={formData.coverLetter}
+                  onChange={handleChange}
+                  placeholder="Briefly describe why you are a good fit for this role..."
+                  rows={4}
+                  className={`w-full border rounded-lg px-3.5 py-2.5 text-sm focus:outline-none transition-all resize-none ${
+                    fieldErrors.coverLetter
+                      ? "border-red-400 ring-1 ring-red-200 bg-red-50/20"
+                      : "border-gray-200 focus:border-gray-400 focus:ring-1 focus:ring-gray-200"
+                  }`}
+                />
+                {fieldErrors.coverLetter && (
+                  <p className="mt-1 text-xs text-red-500 font-medium">{fieldErrors.coverLetter}</p>
+                )}
               </div>
 
-              {/* Share Box */}
-              <div className="pt-4 border-t border-gray-100">
-                <span className="text-xs font-semibold uppercase tracking-wider text-gray-400 block mb-3">
-                  Share this Opening
-                </span>
-                <button
-                  onClick={handleCopyLink}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs font-semibold transition-all cursor-pointer"
-                >
-                  {copied ? (
-                    <>
-                      <FaCheck className="text-emerald-500 text-xs" />
-                      <span>Copied to Clipboard!</span>
-                    </>
-                  ) : (
-                    <>
-                      <FaRegCopy className="text-gray-400 text-xs" />
-                      <span>Copy Position URL</span>
-                    </>
-                  )}
-                </button>
-              </div>
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={applyLoading}
+                className="w-full bg-gray-900 hover:bg-gray-800 disabled:opacity-60 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm cursor-pointer"
+              >
+                {applyLoading ? (
+                  <>
+                    <motion.span
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
+                    />
+                    Submitting Application...
+                  </>
+                ) : (
+                  <>
+                    <FaPaperPlane className="text-sm" />
+                    Submit Application
+                  </>
+                )}
+              </button>
+            </form>
+          </motion.div>
+        </section>
+      </div>
 
-              {/* Need Help Box */}
-              <div className="p-5 rounded-2xl bg-gray-50 border border-gray-100">
-                <div className="flex items-center gap-2 text-gray-900 font-bold text-xs mb-1.5">
-                  <FaRegQuestionCircle className="text-blue-500 text-sm" />
-                  Have Questions?
-                </div>
-                <p className="text-xs text-gray-500 mb-3 leading-relaxed">
-                  Have inquiries regarding this opening or life at Code Club? We'd love to chat.
-                </p>
-                <Link
-                  to="/contact"
-                  className="text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1.5"
-                >
-                  Contact Recruiting Team <FaArrowRight className="text-[10px]" />
-                </Link>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Bottom CTA */}
+      {/* Bottom Unlock Component */}
       <UnlockComponent />
-    </div>
+    </>
   );
 }
